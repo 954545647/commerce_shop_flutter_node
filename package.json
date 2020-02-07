@@ -1,0 +1,52 @@
+{
+  "name": "armored-koa2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev nodemon app.js",
+    "prod": "cross-env NODE_ENV=production pm2 start pm2.conf.json",
+    "test": "cross-env NODE_ENV=test jest --runInBand --forceExit --colors",
+    "lint": "eslint --ext .js ./src"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ioredis": "^4.14.1",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-onerror": "^4.1.0",
+    "koa-router": "^8.0.6",
+    "koa-session": "^5.13.1",
+    "loadsh": "0.0.4",
+    "module-alias": "^2.2.2",
+    "mysql2": "^2.1.0",
+    "require-directory": "^2.1.1",
+    "sequelize": "^5.21.3",
+    "validator": "^12.2.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.3",
+    "cross-env": "^7.0.0",
+    "eslint": "^6.8.0",
+    "jest": "^25.1.0",
+    "pre-commit": "^1.2.2"
+  },
+  "pre-commit": [
+    "lint"
+  ],
+  "_moduleAliases": {
+    "@root": ".",
+    "@middlewares": "src/middlewares",
+    "@core": "src/core",
+    "@utils": "src/utils",
+    "@config": "src/config",
+    "@db": "src/db",
+    "@public": "src/public",
+    "@validators": "src/validators",
+    "@services": "src/services",
+    "@controller": "src/controller",
+    "@model": "src/model"
+  }
+}
