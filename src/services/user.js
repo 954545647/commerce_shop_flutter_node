@@ -2,7 +2,7 @@
  * @description user service
  */
 
-const { User } = require("@db/model");
+const { User_Info } = require("@db/model");
 
 async function getUserInfo(username, password) {
   // 查询条件
@@ -13,7 +13,7 @@ async function getUserInfo(username, password) {
     Object.assign(whereOpt, { password });
   }
   // 查询
-  const result = await User.findOne({
+  const result = await User_Info.findOne({
     attributes: ["id", "username", "phone"],
     where: whereOpt
   });
@@ -27,7 +27,7 @@ async function getUserInfo(username, password) {
  * @param {string} phone 手机号
  */
 async function createUser({ username, password, phone }) {
-  const result = await User.create({
+  const result = await User_Info.create({
     username,
     password,
     phone
