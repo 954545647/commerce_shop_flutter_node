@@ -2,7 +2,12 @@
  * @description user Controller
  */
 
-const { createUser, getUserInfo } = require("@services/user");
+const {
+  createUser,
+  getUserInfo,
+  modifyUser,
+  getUserInfoById
+} = require("@services/user");
 const doCrypto = require("@utils/cryp.js");
 /**
  * 查看用户名是否存在
@@ -54,8 +59,31 @@ async function login(username, password) {
   return new global.succ.SuccessModel({ data: userInfo.dataValues });
 }
 
+/**
+ * 修改用户密码
+ * @param {int} id 用户id
+ * @param {string} password1
+ * @param {string} password2
+ */
+async function changePass(id, oldPass, newPass) {
+  const userInfo = await getUserInfoById(id);
+  oldPass = doCrypto(oldPass);
+  if (oldPass !== userInfo.dataValues.password) {
+    // 原始密码错误
+    return new global.errs.oldPassWrong();
+  }
+  const result = await modifyUser(id, doCrypto(newPass));
+  if (!result[0]) {
+    // 修改密码错误
+    return new global.errs.changePassFail();
+  }
+  // 修改成功
+  return new global.succ.SuccessModel({});
+}
+
 module.exports = {
   isExist,
   register,
-  login
+  login,
+  changePass
 };

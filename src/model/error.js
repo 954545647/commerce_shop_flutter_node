@@ -42,6 +42,7 @@ class registerFailInfo extends HttpException {
   }
 }
 
+// 登录失败
 class loginFailInfo extends HttpException {
   constructor(msg, errorCode) {
     super();
@@ -51,10 +52,31 @@ class loginFailInfo extends HttpException {
   }
 }
 
+// 修改密码失败
+class changePassFail extends HttpException {
+  constructor(msg, errorCode) {
+    super();
+    this.code = 400;
+    this.msg = msg || "修改密码失败";
+    this.errorCode = errorCode || 10004;
+  }
+}
+// 原始密码错误
+class oldPassWrong extends HttpException {
+  constructor(msg, errorCode) {
+    super();
+    this.code = 400;
+    this.msg = msg || "原始密码错误";
+    this.errorCode = errorCode || 10004;
+  }
+}
+
 module.exports = {
   HttpException,
   ParameterException,
   registerUserExist,
   registerFailInfo,
-  loginFailInfo
+  loginFailInfo,
+  changePassFail,
+  oldPassWrong
 };
