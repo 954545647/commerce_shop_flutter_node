@@ -4,13 +4,14 @@
 const router = require("koa-router")();
 const { ChangePasswordValidator } = require("@validators/user");
 const { changePass } = require("@controller/user");
+const Auth = require("@middlewares/auth");
 router.prefix("/user");
 
 // 修改密码
-router.post("/changePass", async ctx => {
+router.post("/changePass", new Auth().token, async ctx => {
   const v = await new ChangePasswordValidator().validate(ctx);
-  const { id, oldPass, newPass } = {
-    id: v.get("body.id"),
+  const id = ctx.auth.id;
+  const { oldPass, newPass } = {
     oldPass: v.get("body.oldPass"),
     newPass: v.get("body.newPass")
   };

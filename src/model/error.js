@@ -67,7 +67,17 @@ class oldPassWrong extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "原始密码错误";
-    this.errorCode = errorCode || 10004;
+    this.errorCode = errorCode || 10005;
+  }
+}
+
+// 登录失败
+class Forbidden extends HttpException {
+  constructor(msg, errorCode) {
+    super();
+    this.code = 400;
+    this.msg = msg || "禁止访问";
+    this.errorCode = errorCode || 10006;
   }
 }
 
@@ -78,5 +88,6 @@ module.exports = {
   registerFailInfo,
   loginFailInfo,
   changePassFail,
-  oldPassWrong
+  oldPassWrong,
+  Forbidden
 };

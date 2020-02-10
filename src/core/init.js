@@ -6,10 +6,15 @@ const requireDirectory = require("require-directory");
 const Router = require("koa-router");
 const bodyParser = require("koa-bodyparser");
 const catchError = require("@middlewares/exception.js");
-const session = require("koa-session");
-const { SESSION_CONF, SESSION_KEYS, ERROR_OPTIONS } = require("@config");
+// const session = require("koa-session");
+const {
+  // SESSION_CONF,
+  SESSION_KEYS,
+  ERROR_OPTIONS
+  // TOKEN_KEY
+} = require("@config");
 const onError = require("koa-onerror");
-
+// const jwt = require("koa-jwt");
 class InitApp {
   /**
    * 初始化方法
@@ -17,7 +22,7 @@ class InitApp {
    */
   static initCore(app) {
     InitApp.app = app;
-    InitApp.initSession();
+    // InitApp.initSession();
     InitApp.initMiddleWares();
     InitApp.initRouters();
     InitApp.initExceptions();
@@ -52,7 +57,20 @@ class InitApp {
     onError(InitApp.app, ERROR_OPTIONS);
     InitApp.app.use(bodyParser());
     InitApp.app.use(catchError);
-    InitApp.app.use(session(SESSION_CONF, InitApp.app));
+    // 配置 session
+    // InitApp.app.use(session(SESSION_CONF, InitApp.app));
+    // 配置 jwt
+    // InitApp.app.use(
+    //   jwt({ secret: TOKEN_KEY }).unless({
+    //     path: [
+    //       /\/register/,
+    //       /\/login/,
+    //       /\/market\/*/,
+    //       // /\/home\/*/,
+    //       /\/rentLand\/*/
+    //     ]
+    //   })
+    // );
   }
 
   /**

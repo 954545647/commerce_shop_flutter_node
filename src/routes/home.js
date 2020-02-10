@@ -1,6 +1,6 @@
 const router = require("koa-router")();
+const Auth = require("@middlewares/auth");
 router.prefix("/home"); // 前缀
-
 // 首页轮播图列表数据
 router.get("/homeSwiperImgList", async ctx => {
   try {

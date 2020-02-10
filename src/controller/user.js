@@ -9,6 +9,7 @@ const {
   getUserInfoById
 } = require("@services/user");
 const doCrypto = require("@utils/cryp.js");
+const generateToken = require("@utils/token");
 /**
  * 查看用户名是否存在
  * @param {string} username
@@ -56,6 +57,9 @@ async function login(username, password) {
     // 登录失败
     return new global.errs.loginFailInfo();
   }
+  // 生成token
+  let token = generateToken(userInfo.dataValues);
+  Object.assign(userInfo.dataValues, { token });
   return new global.succ.SuccessModel({ data: userInfo.dataValues });
 }
 
