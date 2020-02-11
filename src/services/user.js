@@ -2,7 +2,7 @@
  * @description user service
  */
 
-const { User_Info } = require("@db/model");
+const { User_Info, User_Address } = require("@db/model");
 
 /**
  * 查询数据中用户信息
@@ -36,6 +36,21 @@ async function getUserInfoById(id) {
       id
     }
   });
+  return result;
+}
+
+/**
+ * 根据id查找用户地址
+ * @param {int} id
+ */
+async function getUserAddress(id) {
+  // 查询所有
+  const result = await User_Address.findAll({
+    where: {
+      userId: id
+    }
+  });
+  // 返回的是一个数组
   return result;
 }
 
@@ -74,9 +89,35 @@ async function modifyUser(id, password) {
   return res;
 }
 
+async function newUserAddress({
+  id,
+  username,
+  phone,
+  province,
+  city,
+  area,
+  address,
+  isDefault = false
+}) {
+  // 新增地址数据
+  const res = await User_Address.create({
+    userId: id,
+    username,
+    phone,
+    province,
+    city,
+    area,
+    address,
+    isDefault
+  });
+  return res.dataValues;
+}
+
 module.exports = {
   createUser,
   getUserInfo,
   getUserInfoById,
-  modifyUser
+  modifyUser,
+  getUserAddress,
+  newUserAddress
 };

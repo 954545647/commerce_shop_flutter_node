@@ -56,7 +56,6 @@ class LoginValidator extends Validator {
 }
 
 // 修改密码参数校验
-// 注册参数校验
 class ChangePasswordValidator extends Validator {
   constructor() {
     super();
@@ -77,8 +76,37 @@ class ChangePasswordValidator extends Validator {
   // }
 }
 
+// 新增地址参数校验
+class AddNewAddressValidator extends Validator {
+  constructor() {
+    super();
+    this.area = this.city;
+    this.username = [
+      new Rule("isLength", "昵称长度必须在3-20之间", {
+        min: 3,
+        max: 20
+      })
+    ];
+    this.address = [
+      new Rule("isLength", "详细地址长度必须在1到100之间", {
+        min: 1,
+        max: 100
+      })
+    ];
+    this.phone = [new Rule("matches", "手机格式不正确", /^1[3456789]\d{9}$/)];
+    this.province = this.username;
+    this.city = [
+      new Rule("isLength", "城市长度必须在1到10之间", {
+        min: 1,
+        max: 10
+      })
+    ];
+  }
+}
+
 module.exports = {
   LoginValidator,
   RegisterValidator,
-  ChangePasswordValidator
+  ChangePasswordValidator,
+  AddNewAddressValidator
 };

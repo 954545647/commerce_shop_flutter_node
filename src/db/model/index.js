@@ -11,6 +11,11 @@ const Order_Cart = require("./Order/order_cart");
 const Order_Detail = require("./Order/order_detail");
 const Order_Info = require("./Order/order_info");
 
+// 添加外键
+User_Address.belongsTo(User_Info, {
+  foreignKey: "userId"
+});
+
 module.exports = {
   User_Address,
   User_Info,

@@ -6,7 +6,9 @@ const {
   createUser,
   getUserInfo,
   modifyUser,
-  getUserInfoById
+  getUserInfoById,
+  getUserAddress,
+  newUserAddress
 } = require("@services/user");
 const doCrypto = require("@utils/cryp.js");
 const generateToken = require("@utils/token");
@@ -85,9 +87,51 @@ async function changePass(id, oldPass, newPass) {
   return new global.succ.SuccessModel({});
 }
 
+/**
+ * 获取用户地址数据
+ * @param {int} id
+ */
+async function getAddress(id) {
+  const userAddress = await getUserAddress(id);
+  return new global.succ.SuccessModel({ data: userAddress });
+}
+
+/**
+ * 获取用户地址数据
+ * @param {int} 用户id
+ * @param {string} 地址参数
+ */
+async function newAddress({
+  id,
+  username,
+  phone,
+  province,
+  city,
+  area,
+  address
+}) {
+  const userAddress = await newUserAddress({
+    id,
+    username,
+    phone,
+    province,
+    city,
+    area,
+    address
+  });
+  if (userAddress) {
+    console.log(userAddress.dataValues);
+    return new global.succ.SuccessModel({});
+  } else {
+    return new global.errs.newAddressFail({});
+  }
+}
+
 module.exports = {
   isExist,
   register,
   login,
-  changePass
+  changePass,
+  getAddress,
+  newAddress
 };

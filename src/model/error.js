@@ -76,8 +76,18 @@ class Forbidden extends HttpException {
   constructor(msg, errorCode) {
     super();
     this.code = 400;
-    this.msg = msg || "禁止访问";
+    this.msg = msg || "登录失败";
     this.errorCode = errorCode || 10006;
+  }
+}
+
+// 新增地址失败
+class newAddressFail extends HttpException {
+  constructor(msg, errorCode) {
+    super();
+    this.code = 400;
+    this.msg = msg || "新增地址失败";
+    this.errorCode = errorCode || 10007;
   }
 }
 
@@ -89,5 +99,6 @@ module.exports = {
   loginFailInfo,
   changePassFail,
   oldPassWrong,
-  Forbidden
+  Forbidden,
+  newAddressFail
 };

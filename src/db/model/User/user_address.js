@@ -3,7 +3,7 @@
  */
 const seq = require("@db/seq");
 const { Model } = require("sequelize");
-const { STRING, INTEGER } = require("@config/types");
+const { STRING, INTEGER, BOOLEAN } = require("@config/types");
 
 class User_Address extends Model {}
 
@@ -15,6 +15,16 @@ User_Address.init(
       allowNull: false,
       comment: "用户ID"
     },
+    username: {
+      type: STRING,
+      allowNull: false,
+      comment: "收件人姓名"
+    },
+    phone: {
+      type: STRING,
+      allowNull: false,
+      comment: "收件人手机号码"
+    },
     province: {
       type: STRING,
       allowNull: false,
@@ -25,7 +35,7 @@ User_Address.init(
       allowNull: false,
       comment: "市"
     },
-    distrct: {
+    area: {
       type: STRING,
       allowNull: false,
       comment: "区"
@@ -35,10 +45,11 @@ User_Address.init(
       allowNull: false,
       comment: "详细地址"
     },
-    postcode: {
-      type: INTEGER,
-      allowNull: false,
-      comment: "邮编"
+    isDefault: {
+      type: BOOLEAN,
+      defaultValue: false,
+      allowNull: true,
+      comment: "是否是默认地址"
     }
   },
   {

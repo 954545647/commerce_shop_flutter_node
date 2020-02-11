@@ -70,7 +70,6 @@ router.post("/hotGoods", async ctx => {
         monthlySales: 1204,
         yieldly: "浙江杭州"
       },
-
       {
         id: "3",
         name: "番茄",
