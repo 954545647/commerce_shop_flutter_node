@@ -91,6 +91,26 @@ class newAddressFail extends HttpException {
   }
 }
 
+// 积分修改失败
+class changeIntegralFail extends HttpException {
+  constructor(msg, errorCode) {
+    super();
+    this.code = 400;
+    this.msg = msg || "积分修改失败";
+    this.errorCode = errorCode || 10008;
+  }
+}
+
+// 查询签到数据失败
+class searchSignInfoFail extends HttpException {
+  constructor(msg, errorCode) {
+    super();
+    this.code = 400;
+    this.msg = msg || "查询签到数据失败";
+    this.errorCode = errorCode || 10009;
+  }
+}
+
 module.exports = {
   HttpException,
   ParameterException,
@@ -100,5 +120,7 @@ module.exports = {
   changePassFail,
   oldPassWrong,
   Forbidden,
-  newAddressFail
+  newAddressFail,
+  changeIntegralFail,
+  searchSignInfoFail
 };

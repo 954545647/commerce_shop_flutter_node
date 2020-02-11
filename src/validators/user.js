@@ -104,9 +104,23 @@ class AddNewAddressValidator extends Validator {
   }
 }
 
+// 修改积分参数校验
+class ChangeIntegralValidator extends Validator {
+  constructor() {
+    super();
+    this.source = [
+      new Rule("isInt", "积分来源范围为[1-4]", {
+        gt: 0,
+        lt: 5
+      })
+    ];
+  }
+}
+
 module.exports = {
   LoginValidator,
   RegisterValidator,
   ChangePasswordValidator,
-  AddNewAddressValidator
+  AddNewAddressValidator,
+  ChangeIntegralValidator
 };

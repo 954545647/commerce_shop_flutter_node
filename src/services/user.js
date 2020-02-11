@@ -2,8 +2,8 @@
  * @description user service
  */
 
-const { User_Info, User_Address } = require("@db/model");
-
+const { User_Info, User_Address, User_Integral } = require("@db/model");
+const { changeIntegral } = require("@utils/util");
 /**
  * 查询数据中用户信息
  * @param {string} username
@@ -31,7 +31,6 @@ async function getUserInfo(username, password) {
  */
 async function getUserInfoById(id) {
   const result = await User_Info.findOne({
-    attributes: ["id", "username", "password", "phone"],
     where: {
       id
     }
@@ -45,7 +44,23 @@ async function getUserInfoById(id) {
  */
 async function getUserAddress(id) {
   // 查询所有
-  const result = await User_Address.findAll({
+  const result = await User_Address.findOne({
+    where: {
+      userId: id
+    }
+  });
+  console.log(result);
+  // 返回的是一个数组
+  return result;
+}
+
+/**
+ * 根据id查找用户积分信息
+ * @param {int} id
+ */
+async function getUserIntegral(id) {
+  // 查询所有
+  const result = await User_Integral.findAll({
     where: {
       userId: id
     }
@@ -89,6 +104,10 @@ async function modifyUser(id, password) {
   return res;
 }
 
+/**
+ * 新增用户地址
+ * @param {string} param0 地址参数
+ */
 async function newUserAddress({
   id,
   username,
@@ -113,11 +132,51 @@ async function newUserAddress({
   return res.dataValues;
 }
 
+/**
+ * 新增积分数据
+ * @param {int} id  id
+ * @param {int} source 来源
+ */
+async function newUserIntergral(id, source) {
+  const res = await User_Integral.create({
+    userId: id,
+    source
+  });
+  return res;
+}
+
+/**
+ * 修改用户积分
+ * @param {int} id 用户id
+ * @param {int} source 积分修改来源
+ */
+async function changeUserIntegral(id, source, loss) {
+  const userIntegral = await getUserInfoById(id);
+  if (userIntegral.dataValues) {
+    const res = await User_Info.update(
+      {
+        point: changeIntegral(userIntegral.dataValues.point, source, loss)
+      },
+      {
+        where: {
+          id
+        }
+      }
+    );
+    return res;
+  } else {
+    return null;
+  }
+}
+
 module.exports = {
   createUser,
   getUserInfo,
   getUserInfoById,
   modifyUser,
   getUserAddress,
-  newUserAddress
+  newUserAddress,
+  changeUserIntegral,
+  getUserIntegral,
+  newUserIntergral
 };

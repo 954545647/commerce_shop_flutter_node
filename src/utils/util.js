@@ -35,6 +35,22 @@ const findFields = function(instance, { filter }) {
   return _find(instance);
 };
 
+const changeIntegral = function(old, source, loss) {
+  if (source === 1) {
+    // 签到
+    return old + 1;
+  } else if (source === 2) {
+    // 下单
+    return old + 10;
+  } else if (source === 3) {
+    // 评价
+    return old + 5;
+  } else {
+    return old - loss;
+  }
+};
+
 module.exports = {
-  findFields
+  findFields,
+  changeIntegral
 };

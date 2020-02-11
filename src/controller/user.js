@@ -8,7 +8,10 @@ const {
   modifyUser,
   getUserInfoById,
   getUserAddress,
-  newUserAddress
+  newUserAddress,
+  changeUserIntegral,
+  getUserIntegral,
+  newUserIntergral
 } = require("@services/user");
 const doCrypto = require("@utils/cryp.js");
 const generateToken = require("@utils/token");
@@ -120,10 +123,48 @@ async function newAddress({
     address
   });
   if (userAddress) {
-    console.log(userAddress.dataValues);
     return new global.succ.SuccessModel({});
   } else {
     return new global.errs.newAddressFail({});
+  }
+}
+
+/**
+ * 获取用户签到日期
+ * @param {int} id 积分
+ * @param {int} source 修改积分途径
+ */
+async function getUserSignDays(id) {
+  const result = await getUserIntegral(id);
+  if (result) {
+    let signDays = [];
+    result.forEach(data => {
+      signDays.push(data.dataValues);
+    });
+    // 修改成功
+    return new global.succ.SuccessModel({ data: signDays });
+  } else {
+    return new global.errs.searchSignInfoFail();
+  }
+}
+
+/**
+ * 修改积分
+ * @param {int} id 积分
+ * @param {int} source 修改积分途径
+ */
+async function changeIntegral(id, source, loss) {
+  // 先新增一条积分数据
+  const res = await newUserIntergral(id, source);
+  if (res) {
+    // 更新用户的积分数据
+    const result = await changeUserIntegral(id, source, loss);
+    if (result[0]) {
+      // 修改成功
+      return new global.succ.SuccessModel({});
+    } else {
+      return new global.errs.changeIntegralFail();
+    }
   }
 }
 
@@ -133,5 +174,7 @@ module.exports = {
   login,
   changePass,
   getAddress,
-  newAddress
+  newAddress,
+  changeIntegral,
+  getUserSignDays
 };
