@@ -11,6 +11,8 @@ const Good_Supplier = require("./Good/good_supplier");
 const Order_Cart = require("./Order/order_cart");
 const Order_Detail = require("./Order/order_detail");
 const Order_Info = require("./Order/order_info");
+const Coupon_Info = require("./Coupon/coupon_info");
+const Coupon_History = require("./Coupon/coupon_history");
 
 // 地址表和用户信息主表
 User_Address.belongsTo(User_Info, {
@@ -22,6 +24,25 @@ User_Integral.belongsTo(User_Info, {
   foreignKey: "userId"
 });
 
+// 优惠卷使用情况表和用户信息主表
+Coupon_History.belongsTo(User_Info, {
+  foreignKey: "userId"
+});
+
+User_Info.hasMany(Coupon_Info, {
+  foreignKey: "userId"
+});
+
+// 优惠卷使用情况表表和优惠卷表
+Coupon_History.belongsTo(Coupon_Info, {
+  foreignKey: "couponId"
+});
+
+// 优惠卷使用情况表表和订单表;
+Coupon_History.belongsTo(Order_Info, {
+  foreignKey: "orderId"
+});
+
 module.exports = {
   User_Address,
   User_Info,
@@ -31,5 +52,7 @@ module.exports = {
   Good_Supplier,
   Order_Cart,
   Order_Detail,
-  Order_Info
+  Order_Info,
+  Coupon_Info,
+  Coupon_History
 };

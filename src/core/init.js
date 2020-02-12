@@ -78,7 +78,10 @@ class InitApp {
    */
   static initExceptions() {
     const errors = require("@model/error");
+    const couponErrs = require("@model/coupon");
+    const userErrs = require("@model/user");
     const succ = require("@model/success");
+    Object.assign(errors, couponErrs, userErrs);
     global.errs = errors;
     global.succ = succ;
   }

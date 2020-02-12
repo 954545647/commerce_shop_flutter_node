@@ -35,7 +35,7 @@ const findFields = function(instance, { filter }) {
   return _find(instance);
 };
 
-const changeIntegral = function(old, source, loss) {
+const changeIntegral = function(old, source) {
   if (source === 1) {
     // 签到
     return old + 1;
@@ -46,7 +46,7 @@ const changeIntegral = function(old, source, loss) {
     // 评价
     return old + 5;
   } else {
-    return old - loss;
+    return old - Math.abs(source);
   }
 };
 

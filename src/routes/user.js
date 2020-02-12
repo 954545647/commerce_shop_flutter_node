@@ -12,7 +12,8 @@ const {
   getAddress,
   newAddress,
   changeIntegral,
-  getUserSignDays
+  getUserSignDays,
+  getUserTypeInfo
 } = require("@controller/user");
 const Auth = require("@middlewares/auth");
 router.prefix("/user");
@@ -28,6 +29,13 @@ router.post("/changePass", new Auth().token, async ctx => {
   ctx.body = await changePass(id, oldPass, newPass);
 });
 
+// 获取用户数据
+router.post("/getUserInfo", new Auth().token, async ctx => {
+  const { type = 1 } = ctx.request.body;
+  const id = ctx.auth.id;
+  ctx.body = await getUserTypeInfo(id, type);
+});
+
 // 获取用户地址
 router.post("/address", new Auth().token, async ctx => {
   const id = ctx.auth.id;
@@ -38,7 +46,6 @@ router.post("/address", new Auth().token, async ctx => {
 router.post("/newAddress", new Auth().token, async ctx => {
   await new AddNewAddressValidator().validate(ctx);
   const { username, phone, province, city, area, address } = ctx.request.body;
-  console.log(username, phone, province, city, area, address);
   const id = ctx.auth.id;
   ctx.body = await newAddress({
     id,
@@ -61,8 +68,8 @@ router.post("/getUserSignDays", new Auth().token, async ctx => {
 router.post("/changeIntegral", new Auth().token, async ctx => {
   await new ChangeIntegralValidator().validate(ctx);
   const id = ctx.auth.id;
-  const { source, loss = 0 } = ctx.request.body;
-  ctx.body = await changeIntegral(id, source, loss);
+  const { source } = ctx.request.body;
+  ctx.body = await changeIntegral(id, source);
 });
 
 module.exports = router;

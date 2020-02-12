@@ -109,9 +109,9 @@ class ChangeIntegralValidator extends Validator {
   constructor() {
     super();
     this.source = [
-      new Rule("isInt", "积分来源范围为[1-4]", {
-        gt: 0,
-        lt: 5
+      new Rule("isInt", "积分来源范围为[1-1000]", {
+        gt: -1001,
+        lt: 1001
       })
     ];
   }

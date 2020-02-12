@@ -4,13 +4,13 @@
 
 const {
   createUser,
-  getUserInfo,
   modifyUser,
-  getUserInfoById,
+  getUserInfo,
   getUserAddress,
+  getUserInfoById,
+  getUserIntegral,
   newUserAddress,
   changeUserIntegral,
-  getUserIntegral,
   newUserIntergral
 } = require("@services/user");
 const doCrypto = require("@utils/cryp.js");
@@ -22,9 +22,9 @@ const generateToken = require("@utils/token");
 async function isExist(username) {
   const userInfo = await getUserInfo(username);
   if (userInfo) {
-    return new SuccessModel(userInfo);
+    return new global.succ.SuccessModel({ data: userInfo });
   } else {
-    return new global.erros.registerUserExist();
+    return new global.errs.registerUserExist();
   }
 }
 
@@ -153,18 +153,37 @@ async function getUserSignDays(id) {
  * @param {int} id 积分
  * @param {int} source 修改积分途径
  */
-async function changeIntegral(id, source, loss) {
+async function changeIntegral(id, source) {
   // 先新增一条积分数据
   const res = await newUserIntergral(id, source);
   if (res) {
     // 更新用户的积分数据
-    const result = await changeUserIntegral(id, source, loss);
+    const result = await changeUserIntegral(id, source);
     if (result[0]) {
       // 修改成功
       return new global.succ.SuccessModel({});
     } else {
       return new global.errs.changeIntegralFail();
     }
+  }
+}
+
+async function getUserTypeInfo(id, type) {
+  let result;
+  if (type == 1) {
+    // 获取用户基本信息
+    result = await getUserInfoById(id);
+  } else if (type == 2) {
+    // 获取用户地址信息
+    result = await getUserAddress(id);
+  } else if (type == 3) {
+    // 获取用户积分信息
+    result = await getUserIntegral(id);
+  }
+  if (result) {
+    return new global.succ.SuccessModel({ data: result });
+  } else {
+    return new global.errs.searchInfoFail();
   }
 }
 
@@ -176,5 +195,6 @@ module.exports = {
   getAddress,
   newAddress,
   changeIntegral,
-  getUserSignDays
+  getUserSignDays,
+  getUserTypeInfo
 };

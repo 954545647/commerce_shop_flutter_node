@@ -31,6 +31,7 @@ async function getUserInfo(username, password) {
  */
 async function getUserInfoById(id) {
   const result = await User_Info.findOne({
+    attributes: ["id", "username", "phone", "point", "createdAt"],
     where: {
       id
     }
@@ -44,12 +45,11 @@ async function getUserInfoById(id) {
  */
 async function getUserAddress(id) {
   // 查询所有
-  const result = await User_Address.findOne({
+  const result = await User_Address.findAll({
     where: {
       userId: id
     }
   });
-  console.log(result);
   // 返回的是一个数组
   return result;
 }
@@ -150,12 +150,12 @@ async function newUserIntergral(id, source) {
  * @param {int} id 用户id
  * @param {int} source 积分修改来源
  */
-async function changeUserIntegral(id, source, loss) {
+async function changeUserIntegral(id, source) {
   const userIntegral = await getUserInfoById(id);
   if (userIntegral.dataValues) {
     const res = await User_Info.update(
       {
-        point: changeIntegral(userIntegral.dataValues.point, source, loss)
+        point: changeIntegral(userIntegral.dataValues.point, source)
       },
       {
         where: {

@@ -46,6 +46,7 @@ router.get("/homeNewsList", async ctx => {
 
 // 热门商品
 router.post("/hotGoods", async ctx => {
+  console.log("66666666666------6666666");
   try {
     let goodsList = [
       {
