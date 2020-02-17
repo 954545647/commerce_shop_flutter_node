@@ -1,5 +1,5 @@
 /**
- * @description 用户类异常集合
+ * @description 用户类异常集合 11xxx
  */
 
 const { HttpException } = require("./error");
@@ -10,7 +10,7 @@ class registerUserExist extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "用户名已经存在";
-    this.errorCode = errorCode || 10001;
+    this.errorCode = errorCode || 11001;
   }
 }
 
@@ -20,17 +20,17 @@ class registerFailInfo extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "注册失败请重试";
-    this.errorCode = errorCode || 10002;
+    this.errorCode = errorCode || 11002;
   }
 }
 
-// 登录失败
-class loginFailInfo extends HttpException {
+// 登录失败,当前用户不存在
+class userNotExit extends HttpException {
   constructor(msg, errorCode) {
     super();
     this.code = 400;
-    this.msg = msg || "登录失败";
-    this.errorCode = errorCode || 10003;
+    this.msg = msg || "登录失败,当前用户不存在";
+    this.errorCode = errorCode || 11003;
   }
 }
 
@@ -40,7 +40,7 @@ class changePassFail extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "修改密码失败";
-    this.errorCode = errorCode || 10004;
+    this.errorCode = errorCode || 11004;
   }
 }
 
@@ -50,7 +50,7 @@ class oldPassWrong extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "原始密码错误";
-    this.errorCode = errorCode || 10005;
+    this.errorCode = errorCode || 11005;
   }
 }
 
@@ -60,7 +60,7 @@ class Forbidden extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "登录失败";
-    this.errorCode = errorCode || 10006;
+    this.errorCode = errorCode || 11006;
   }
 }
 
@@ -70,7 +70,7 @@ class newAddressFail extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "新增地址失败";
-    this.errorCode = errorCode || 10007;
+    this.errorCode = errorCode || 11007;
   }
 }
 
@@ -80,7 +80,7 @@ class changeIntegralFail extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "积分修改失败";
-    this.errorCode = errorCode || 10008;
+    this.errorCode = errorCode || 11008;
   }
 }
 
@@ -90,14 +90,25 @@ class searchSignInfoFail extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "查询签到数据失败";
-    this.errorCode = errorCode || 10009;
+    this.errorCode = errorCode || 11009;
+  }
+}
+
+// 用户密码不正确
+class userPassError extends HttpException {
+  constructor(msg, errorCode) {
+    super();
+    this.code = 400;
+    this.msg = msg || "用户密码不正确";
+    this.errorCode = errorCode || 11010;
   }
 }
 
 module.exports = {
   registerUserExist,
   registerFailInfo,
-  loginFailInfo,
+  userNotExit,
+  userPassError,
   changePassFail,
   oldPassWrong,
   Forbidden,

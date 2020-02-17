@@ -1,13 +1,21 @@
 const router = require("koa-router")();
-const Auth = require("@middlewares/auth");
 router.prefix("/home"); // 前缀
 // 首页轮播图列表数据
 router.get("/homeSwiperImgList", async ctx => {
   try {
     let swiperImgList = [
-      { url: "https://inews.gtimg.com/newsapp_ls/0/10843271260_295195/0" },
-      { url: "https://inews.gtimg.com/newsapp_ls/0/10843271260_295195/0" },
-      { url: "https://inews.gtimg.com/newsapp_ls/0/10843271261_295195/0" }
+      {
+        url:
+          "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1218413399,3550156096&fm=26&gp=0.jpg"
+      },
+      {
+        url:
+          "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1375254066,900171768&fm=26&gp=0.jpg"
+      },
+      {
+        url:
+          "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1581768176501&di=db6bc203db03619464e1db1940cf9c0c&imgtype=0&src=http%3A%2F%2Fdpic.tiankong.com%2Fsb%2Fwf%2FQJ8618406592.jpg"
+      }
     ];
     ctx.body = {
       status: 200,

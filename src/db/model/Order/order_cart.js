@@ -4,32 +4,42 @@
 
 const seq = require("@db/seq");
 const { Model } = require("sequelize");
-const { INTEGER } = require("@config/types");
+const { INTEGER, STRING } = require("@config/types");
 
 class Order_Cart extends Model {}
 
 // 订单购物车表
 Order_Cart.init(
   {
-    user_id: {
+    userId: {
       type: INTEGER,
       allowNull: false,
       comment: "用户id"
     },
-    good_id: {
+    goodId: {
       type: INTEGER,
       allowNull: false,
       comment: "商品id"
     },
-    good_num: {
+    goodName: {
+      type: STRING,
+      allowNull: false,
+      comment: "商品名称"
+    },
+    count: {
       type: INTEGER,
       allowNull: false,
       comment: "加入购物车商品数量"
     },
-    good_price: {
-      type: INTEGER,
+    price: {
+      type: STRING,
       allowNull: false,
       comment: "商品价格"
+    },
+    expressCount: {
+      type: STRING,
+      allowNull: false,
+      comment: "商品运费"
     }
   },
   {

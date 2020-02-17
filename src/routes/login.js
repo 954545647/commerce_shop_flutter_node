@@ -1,5 +1,5 @@
 /**
- * @description 登录接口
+ * @description 登录注册接口
  */
 const router = require("koa-router")();
 const { RegisterValidator, LoginValidator } = require("@validators/user");

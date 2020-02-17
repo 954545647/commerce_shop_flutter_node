@@ -1,5 +1,5 @@
 /**
- * @description 特定类型的异常集合
+ * @description 特定类型的异常集合 10xxx
  */
 
 // 服务器异常
@@ -28,12 +28,45 @@ class searchInfoFail extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "查询数据失败";
-    this.errorCode = errorCode || 9999;
+    this.errorCode = errorCode || 10001;
+  }
+}
+
+// 新增数据失败
+class createInfoFail extends HttpException {
+  constructor(msg, errorCode) {
+    super();
+    this.code = 400;
+    this.msg = msg || "新增数据失败";
+    this.errorCode = errorCode || 10002;
+  }
+}
+
+// 更新数据失败
+class updateInfoFail extends HttpException {
+  constructor(msg, errorCode) {
+    super();
+    this.code = 400;
+    this.msg = msg || "更新数据失败";
+    this.errorCode = errorCode || 10003;
+  }
+}
+
+// 删除数据失败
+class deleteInfoFail extends HttpException {
+  constructor(msg, errorCode) {
+    super();
+    this.code = 400;
+    this.msg = msg || "删除数据失败";
+    this.errorCode = errorCode || 10004;
   }
 }
 
 module.exports = {
   HttpException,
   ParameterException,
-  searchInfoFail
+  searchInfoFail,
+  createInfoFail,
+  updateInfoFail,
+  deleteInfoFail
 };

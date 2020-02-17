@@ -16,7 +16,7 @@ router.post("/getAlls", new Auth().token, async ctx => {
   ctx.body = await getAllCoupons();
 });
 
-// 查找所有优惠卷
+// 查找用户优惠卷
 router.post("/myCoupon", new Auth().token, async ctx => {
   const id = ctx.auth.id;
   ctx.body = await getUserCoupon(id);

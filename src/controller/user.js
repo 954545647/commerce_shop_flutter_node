@@ -58,9 +58,17 @@ async function register({ username, password, phone }) {
 async function login(username, password) {
   // 获取用户信息
   const userInfo = await getUserInfo(username, doCrypto(password));
+  // 区分是用户不存在还是密码错误
+  // 登录失败：用户不存在
   if (!userInfo) {
-    // 登录失败
-    return new global.errs.loginFailInfo();
+    return new global.errs.userNotExit();
+  }
+  // 登录失败：用户密码不存在
+  if (userInfo && userInfo.dataValues && userInfo.dataValues.password) {
+    let pass = userInfo.dataValues.password;
+    if (doCrypto(password) != pass) {
+      return new global.errs.userPassError();
+    }
   }
   // 生成token
   let token = generateToken(userInfo.dataValues);

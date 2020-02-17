@@ -6,7 +6,7 @@ const User_Address = require("./User/user_address");
 const User_Info = require("./User/user_info");
 const User_Integral = require("./User/user_integral");
 const Good_Comment = require("./Good/good_comment");
-const Product_Info = require("./Good/good_info");
+const Good_Info = require("./Good/good_info");
 const Good_Supplier = require("./Good/good_supplier");
 const Order_Cart = require("./Order/order_cart");
 const Order_Detail = require("./Order/order_detail");
@@ -29,6 +29,7 @@ Coupon_History.belongsTo(User_Info, {
   foreignKey: "userId"
 });
 
+// 用户信息表和优惠卷信息表
 User_Info.hasMany(Coupon_Info, {
   foreignKey: "userId"
 });
@@ -43,12 +44,23 @@ Coupon_History.belongsTo(Order_Info, {
   foreignKey: "orderId"
 });
 
+// 商品信息表和商品供应商表
+Good_Info.belongsTo(Good_Supplier, {
+  foreignKey: "supplierId",
+  targetKey: "id"
+});
+
+// 商品信息表和商品评价表
+Good_Comment.belongsTo(Good_Info, {
+  foreignKey: "good_id"
+});
+
 module.exports = {
   User_Address,
   User_Info,
   User_Integral,
   Good_Comment,
-  Product_Info,
+  Good_Info,
   Good_Supplier,
   Order_Cart,
   Order_Detail,

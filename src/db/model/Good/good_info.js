@@ -11,13 +11,18 @@ class Good_Info extends Model {}
 // 商品信息表
 Good_Info.init(
   {
+    supplierId: {
+      type: INTEGER,
+      allowNull: false,
+      comment: "供应商ID"
+    },
     goodName: {
       type: STRING,
       allowNull: false,
       comment: "商品名称"
     },
     price: {
-      type: INTEGER,
+      type: STRING,
       allowNull: false,
       comment: "商品价格"
     },
@@ -38,13 +43,20 @@ Good_Info.init(
     },
     sales: {
       type: INTEGER,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: 0,
       comment: "商品销量"
     },
-    supplier_id: {
+    expressCost: {
       type: INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      comment: "快递费用"
+    },
+    from: {
+      type: STRING,
       allowNull: false,
-      comment: "供应商ID"
+      comment: "发源地"
     }
   },
   {

@@ -1,0 +1,10 @@
+{
+  "goodName": "土豆2",
+  "price": 1.2,
+  "descript": "新鲜的土豆",
+  "stock": 100,
+  "sales": "0",
+  "expressCost": "8",
+  "from": "云南",
+  "supplierId": 1
+}

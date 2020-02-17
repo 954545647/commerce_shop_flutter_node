@@ -11,17 +11,17 @@ class Good_Comment extends Model {}
 // 商品评论表
 Good_Comment.init(
   {
-    good_id: {
+    goodId: {
       type: INTEGER,
       allowNull: false,
       comment: "商品ID"
     },
-    order_id: {
+    orderId: {
       type: INTEGER,
       allowNull: false,
       comment: "订单ID"
     },
-    user_id: {
+    userId: {
       type: STRING,
       allowNull: false,
       comment: "用户ID"

@@ -1,5 +1,5 @@
 /**
- * @description 优惠卷类异常集合
+ * @description 优惠卷类异常集合 12xxx
  */
 
 const { HttpException } = require("./error");
@@ -10,7 +10,7 @@ class newCouponFail extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "优惠卷创建失败";
-    this.errorCode = errorCode || 11001;
+    this.errorCode = errorCode || 12001;
   }
 }
 
@@ -20,7 +20,7 @@ class takeCouponFail extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "优惠卷领取失败";
-    this.errorCode = errorCode || 11002;
+    this.errorCode = errorCode || 12002;
   }
 }
 
@@ -30,7 +30,7 @@ class alreadyTake extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "优惠卷已经领取了";
-    this.errorCode = errorCode || 11003;
+    this.errorCode = errorCode || 12003;
   }
 }
 
@@ -40,7 +40,7 @@ class couponUseDataWrong extends HttpException {
     super();
     this.code = 400;
     this.msg = msg || "优惠卷使用数据修改失败";
-    this.errorCode = errorCode || 11004;
+    this.errorCode = errorCode || 12004;
   }
 }
 

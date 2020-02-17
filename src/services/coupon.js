@@ -9,14 +9,15 @@ const { Coupon_Info, Coupon_History } = require("@db/model");
  */
 async function getCoupons() {
   // 联合查询
-  const result = await Coupon_History.findAll({
-    include: [
-      {
-        model: Coupon_Info,
-        attributes: ["name", "type", "with_amount", "used_amount"]
-      }
-    ]
-  });
+  const result = await Coupon_Info.findAll();
+  // const result = await Coupon_History.findAll({
+  //   include: [
+  //     {
+  //       model: Coupon_Info,
+  //       attributes: ["name", "type", "with_amount", "used_amount"]
+  //     }
+  //   ]
+  // });
   return result;
 }
 
@@ -29,7 +30,14 @@ async function getUserCounpons(id) {
   const result = await Coupon_History.findAll({
     where: {
       userId: id
-    }
+    },
+    // 联合查询，将用户领取或使用的优惠卷的劵本体信息查询出来
+    include: [
+      {
+        model: Coupon_Info,
+        attributes: ["name", "type", "with_amount", "used_amount"]
+      }
+    ]
   });
   // 返回的是一个数组
   return result;

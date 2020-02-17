@@ -4,14 +4,19 @@
 
 const seq = require("@db/seq");
 const { Model } = require("sequelize");
-const { STRING } = require("@config/types");
+const { STRING, INTEGER } = require("@config/types");
 
 class Good_Supplier extends Model {}
 
 // 商品供应商表
 Good_Supplier.init(
   {
-    supplier_name: {
+    id: {
+      type: INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    supplierName: {
       type: STRING,
       allowNull: false,
       comment: "供应商名称"
