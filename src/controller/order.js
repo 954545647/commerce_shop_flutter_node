@@ -14,8 +14,25 @@ const {
  * @param {int} goodId 商品id
  */
 async function getCarts(userId, goodId = null) {
-  const cartInfo = await getUserCarts(userId, goodId);
-  if (cartInfo) {
+  const result = await getUserCarts(userId, goodId);
+  if (result) {
+    let cartInfo = [];
+    result.forEach(data => {
+      if (
+        data &&
+        data.dataValues &&
+        data.dataValues.Good_Info &&
+        data.dataValues.Good_Info.dataValues
+      ) {
+        // 对数据进行处理，并且删掉 Good_Info 的id数据
+        let goodInfo = data.dataValues.Good_Info.dataValues;
+        // 因为购物车数据中已经有goodId了，所以直接删掉即可
+        delete goodInfo.id;
+        Object.assign(data.dataValues, goodInfo);
+        delete data.dataValues.Good_Info;
+        cartInfo.push(data.dataValues);
+      }
+    });
     // 获取成功
     return new global.succ.SuccessModel({ data: cartInfo });
   } else {
@@ -81,7 +98,18 @@ async function handleCarts({
   }
 }
 
+async function updateCarts(userId, goodId, count) {
+  const result = await updateUserCarts(userId, goodId, count);
+  if (result) {
+    // 获取成功
+    return new global.succ.SuccessModel({ msg: "更新成功" });
+  } else {
+    return new global.errs.updateInfoFail();
+  }
+}
+
 module.exports = {
   handleCarts,
+  updateCarts,
   getCarts
 };

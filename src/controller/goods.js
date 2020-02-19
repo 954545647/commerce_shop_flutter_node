@@ -12,7 +12,6 @@ const {
  * 获取所有商品
  */
 async function getAlls(id) {
-  console.log(id);
   const result = await getAllGoods(id);
   if (result) {
     let goodInfo = [];
@@ -25,6 +24,10 @@ async function getAlls(id) {
       ) {
         // 将合并查找的 Good_Supplier 信息提取出来
         let supplierInfo = data.dataValues.Good_Supplier.dataValues;
+        // 把商品数据的id名字更改为 goodId，这样不会发生重叠
+        supplierInfo = JSON.parse(
+          JSON.stringify(supplierInfo).replace(/id/g, "goodId")
+        );
         Object.assign(data.dataValues, supplierInfo);
         delete data.dataValues.Good_Supplier;
         goodInfo.push(data.dataValues);

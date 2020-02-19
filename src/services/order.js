@@ -2,7 +2,12 @@
  * @description 订单 services
  */
 
-const { Order_Cart, Order_Detail, Order_Info } = require("@db/model");
+const {
+  Order_Cart,
+  Order_Detail,
+  Order_Info,
+  Good_Info
+} = require("@db/model");
 
 /**
  * 获取用户的购物车
@@ -14,16 +19,26 @@ async function getUserCarts(userId, goodId) {
   const whereOpt = {
     userId: userId
   };
-  // 查找用户购物车单条数据
+  // 查找用户购物车单条数据（并且将商品信息合并）
   if (goodId) {
     Object.assign(whereOpt, { goodId });
     result = await Order_Cart.findOne({
-      where: whereOpt
+      where: whereOpt,
+      include: [
+        {
+          model: Good_Info
+        }
+      ]
     });
   } else {
-    // 查找用户全部购物车数据
+    // 查找用户全部购物车数据（并且将商品信息合并）
     result = await Order_Cart.findAll({
-      where: whereOpt
+      where: whereOpt,
+      include: [
+        {
+          model: Good_Info
+        }
+      ]
     });
   }
   return result;

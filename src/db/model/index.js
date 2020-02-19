@@ -52,7 +52,15 @@ Good_Info.belongsTo(Good_Supplier, {
 
 // 商品信息表和商品评价表
 Good_Comment.belongsTo(Good_Info, {
-  foreignKey: "good_id"
+  foreignKey: "goodId"
+});
+
+Order_Cart.belongsTo(Good_Info, {
+  foreignKey: "goodId"
+});
+
+Order_Cart.belongsTo(User_Info, {
+  foreignKey: "userId"
 });
 
 module.exports = {

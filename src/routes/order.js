@@ -5,7 +5,7 @@
 const router = require("koa-router")();
 const Auth = require("@middlewares/auth");
 router.prefix("/order");
-const { handleCarts, getCarts } = require("@controller/order");
+const { handleCarts, getCarts, updateCarts } = require("@controller/order");
 
 // 操作购物车(添加、移除)
 router.post("/handleCart", new Auth().token, async ctx => {
@@ -19,6 +19,13 @@ router.post("/handleCart", new Auth().token, async ctx => {
     count,
     expressCount
   });
+});
+
+// 修改购物车当前商品数量
+router.post("/updateCarts", new Auth().token, async ctx => {
+  const { count, goodId } = ctx.request.body;
+  const userId = ctx.auth.id;
+  ctx.body = await updateCarts(userId, goodId, count);
 });
 
 // 查看购物车
