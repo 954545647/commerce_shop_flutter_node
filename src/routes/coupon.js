@@ -23,7 +23,7 @@ router.post("/myCoupon", new Auth().token, async ctx => {
 });
 
 // 新增优惠卷
-router.post("/new", new Auth().token, async ctx => {
+router.post("/new", async ctx => {
   const { name, type, with_amount, used_amount } = ctx.request.body;
   ctx.body = await newCoupon({
     name,

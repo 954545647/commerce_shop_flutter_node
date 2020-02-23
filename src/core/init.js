@@ -6,15 +6,10 @@ const requireDirectory = require("require-directory");
 const Router = require("koa-router");
 const bodyParser = require("koa-bodyparser");
 const catchError = require("@middlewares/exception.js");
-// const session = require("koa-session");
-const {
-  // SESSION_CONF,
-  SESSION_KEYS,
-  ERROR_OPTIONS
-  // TOKEN_KEY
-} = require("@config");
+const { startOrderInterval } = require("@utils/queue");
+const { ERROR_OPTIONS } = require("@config");
 const onError = require("koa-onerror");
-// const jwt = require("koa-jwt");
+
 class InitApp {
   /**
    * 初始化方法
@@ -22,11 +17,11 @@ class InitApp {
    */
   static initCore(app) {
     InitApp.app = app;
-    // InitApp.initSession();
     InitApp.initMiddleWares();
     InitApp.initRouters();
     InitApp.initExceptions();
     InitApp.initErrorPage();
+    InitApp.initMessageQueue(); // 初始化消息队列
   }
 
   /**
@@ -57,20 +52,6 @@ class InitApp {
     onError(InitApp.app, ERROR_OPTIONS);
     InitApp.app.use(bodyParser());
     InitApp.app.use(catchError);
-    // 配置 session
-    // InitApp.app.use(session(SESSION_CONF, InitApp.app));
-    // 配置 jwt
-    // InitApp.app.use(
-    //   jwt({ secret: TOKEN_KEY }).unless({
-    //     path: [
-    //       /\/register/,
-    //       /\/login/,
-    //       /\/market\/*/,
-    //       // /\/home\/*/,
-    //       /\/rentLand\/*/
-    //     ]
-    //   })
-    // );
   }
 
   /**
@@ -84,13 +65,6 @@ class InitApp {
     Object.assign(errors, couponErrs, userErrs);
     global.errs = errors;
     global.succ = succ;
-  }
-
-  /**
-   * 初始化 Session 配置信息
-   */
-  static initSession() {
-    InitApp.app.keys = SESSION_KEYS;
   }
 
   /**
@@ -111,6 +85,17 @@ class InitApp {
         InitApp.app.use(obj.routes(), obj.allowedMethods());
       }
     }
+  }
+
+  /**
+   *
+   */
+  static initMessageQueue() {
+    global.orderLoop = new Array(30);
+    global.orderMap = new Map(); // 记录每个uid的slotIndex
+    global.currentSlotIndex = 1; // 当前要检测的slot
+    // 开启轮询
+    startOrderInterval();
   }
 }
 

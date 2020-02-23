@@ -2,11 +2,7 @@
  * @description good Controller
  */
 
-const {
-  newGoodInfo,
-  getAllGoods,
-  newSupplierInfo
-} = require("@services/goods");
+const { newGoodInfo, getAllGoods } = require("@services/goods");
 
 /**
  * 获取所有商品
@@ -72,25 +68,7 @@ async function newGood({
   }
 }
 
-/**
- * 新增供应商
- * @param {string | int} param0 供应商信息
- */
-async function newSupplier({ name, phone, address }) {
-  const supplierInfo = await newSupplierInfo({
-    name,
-    phone,
-    address
-  });
-  if (supplierInfo) {
-    return new global.succ.SuccessModel({ data: supplierInfo });
-  } else {
-    return new global.errs.createInfoFail();
-  }
-}
-
 module.exports = {
   getAlls,
-  newGood,
-  newSupplier
+  newGood
 };

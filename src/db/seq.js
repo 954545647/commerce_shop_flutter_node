@@ -11,7 +11,8 @@ const { host, password, user, datebase } = MYSQL_CONF;
 const conf = {
   host,
   dialect: "mysql",
-  timezone: "+08:00"
+  timezone: "+08:00",
+  logging: () => {}
 };
 
 if (isTest) {
@@ -41,7 +42,7 @@ const seq = new Sequelize(datebase, user, password, conf);
 //     force: true
 //   })
 //   .then(() => {
-//     console.log("sync ok");
+//     console.log("数据库更新sync ok");
 //     process.exit();
 //   });
 

@@ -30,6 +30,11 @@ Good_Supplier.init(
       type: STRING,
       allowNull: false,
       comment: "供应商地址"
+    },
+    cover: {
+      type: STRING,
+      allowNull: false,
+      comment: "供应商封面"
     }
   },
   {

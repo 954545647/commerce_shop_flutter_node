@@ -11,35 +11,36 @@ class Order_Info extends Model {}
 // 订单信息主表
 Order_Info.init(
   {
-    user_id: {
+    userId: {
       type: INTEGER,
       allowNull: false,
       comment: "下单人id（用户id）"
     },
-    order_username: {
-      type: STRING,
-      allowNull: false,
-      comment: "下单人姓名"
-    },
-    payment_method: {
+    couponId: {
       type: INTEGER,
-      allowNull: false,
-      comment: "支付方式：0余额，1线上"
+      allowNull: true,
+      comment: "使用优惠卷id"
     },
-    order_money: {
+    order_amount: {
       type: INTEGER,
       allowNull: false,
       comment: "订单金额"
     },
-    payment_money: {
+    pay_money: {
       type: INTEGER,
       allowNull: false,
-      comment: "支付金额"
+      comment: "实际支付金额"
     },
-    discount_money: {
+    address: {
+      type: STRING,
+      allowNull: false,
+      comment: "收货地址"
+    },
+    status: {
       type: INTEGER,
       allowNull: false,
-      comment: "优惠卷优惠金额"
+      defaultValue: 1,
+      comment: "订单状态：1：未支付，2：已支付，3：失效"
     }
   },
   {

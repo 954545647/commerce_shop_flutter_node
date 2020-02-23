@@ -11,7 +11,8 @@ const {
   getUserIntegral,
   newUserAddress,
   changeUserIntegral,
-  newUserIntergral
+  newUserIntergral,
+  getUserDefaultAddress
 } = require("@services/user");
 const doCrypto = require("@utils/cryp.js");
 const generateToken = require("@utils/token");
@@ -104,7 +105,26 @@ async function changePass(id, oldPass, newPass) {
  */
 async function getAddress(id) {
   const userAddress = await getUserAddress(id);
-  return new global.succ.SuccessModel({ data: userAddress });
+  if (userAddress) {
+    return new global.succ.SuccessModel({ data: userAddress });
+  } else {
+    return new global.errs.searchInfoFail();
+  }
+}
+
+/**
+ * 获取用户默认地址数据
+ * @param {int} id
+ */
+async function getDefaultAddress(id) {
+  const userAddress = await getUserDefaultAddress(id);
+  if (userAddress) {
+    let defaultAddress = userAddress.dataValues;
+    console.log(defaultAddress);
+    return new global.succ.SuccessModel({ data: defaultAddress });
+  } else {
+    return new global.errs.searchInfoFail();
+  }
 }
 
 /**
@@ -119,7 +139,8 @@ async function newAddress({
   province,
   city,
   area,
-  address
+  address,
+  isDefault
 }) {
   const userAddress = await newUserAddress({
     id,
@@ -128,7 +149,8 @@ async function newAddress({
     province,
     city,
     area,
-    address
+    address,
+    isDefault
   });
   if (userAddress) {
     return new global.succ.SuccessModel({});
@@ -204,5 +226,6 @@ module.exports = {
   newAddress,
   changeIntegral,
   getUserSignDays,
-  getUserTypeInfo
+  getUserTypeInfo,
+  getDefaultAddress
 };

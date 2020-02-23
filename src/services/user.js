@@ -54,6 +54,19 @@ async function getUserAddress(id) {
   return result;
 }
 
+// 获取用户默认地址
+async function getUserDefaultAddress(id) {
+  // 查询所有
+  const result = await User_Address.findOne({
+    where: {
+      userId: id,
+      isDefault: true
+    }
+  });
+  // 返回的是一个数组
+  return result;
+}
+
 /**
  * 根据id查找用户积分信息
  * @param {int} id
@@ -116,7 +129,7 @@ async function newUserAddress({
   city,
   area,
   address,
-  isDefault = false
+  isDefault
 }) {
   // 新增地址数据
   const res = await User_Address.create({
@@ -178,5 +191,6 @@ module.exports = {
   newUserAddress,
   changeUserIntegral,
   getUserIntegral,
-  newUserIntergral
+  newUserIntergral,
+  getUserDefaultAddress
 };

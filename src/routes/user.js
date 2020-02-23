@@ -13,7 +13,8 @@ const {
   newAddress,
   changeIntegral,
   getUserSignDays,
-  getUserTypeInfo
+  getUserTypeInfo,
+  getDefaultAddress
 } = require("@controller/user");
 const Auth = require("@middlewares/auth");
 router.prefix("/user");
@@ -37,15 +38,29 @@ router.post("/getUserInfo", new Auth().token, async ctx => {
 });
 
 // 获取用户地址
-router.post("/address", new Auth().token, async ctx => {
+router.get("/address", new Auth().token, async ctx => {
   const id = ctx.auth.id;
   ctx.body = await getAddress(id);
+});
+
+// 获取用户默认地址
+router.get("/defaultAddress", new Auth().token, async ctx => {
+  const id = ctx.auth.id;
+  ctx.body = await getDefaultAddress(id);
 });
 
 // 新增用户地址
 router.post("/newAddress", new Auth().token, async ctx => {
   await new AddNewAddressValidator().validate(ctx);
-  const { username, phone, province, city, area, address } = ctx.request.body;
+  const {
+    username,
+    phone,
+    province,
+    city,
+    area,
+    address,
+    isDefault
+  } = ctx.request.body;
   const id = ctx.auth.id;
   ctx.body = await newAddress({
     id,
@@ -54,7 +69,8 @@ router.post("/newAddress", new Auth().token, async ctx => {
     province,
     city,
     area,
-    address
+    address,
+    isDefault
   });
 });
 

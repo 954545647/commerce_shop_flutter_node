@@ -36,7 +36,7 @@ Order_Cart.init(
       allowNull: false,
       comment: "商品价格"
     },
-    expressCount: {
+    expressCost: {
       type: STRING,
       allowNull: false,
       comment: "商品运费"
