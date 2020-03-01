@@ -24,6 +24,19 @@ async function getAllGoods(id) {
 }
 
 /**
+ * 获取商品信息根据id
+ * @param {int} goodId
+ */
+async function getGoodInfoById(goodId) {
+  const result = await Good_Info.findOne({
+    where: {
+      id: goodId
+    }
+  });
+  return result;
+}
+
+/**
  * 新增商品
  * @param {sting|int} param0 新增商品信息
  */
@@ -52,7 +65,29 @@ async function newGoodInfo({
   return result;
 }
 
+/**
+ * 更新商品信息
+ * @param {int} goodId
+ * @param {int} count
+ */
+async function updateGoodInfo(goodId, stock, sales) {
+  let result = await Good_Info.update(
+    {
+      stock,
+      sales
+    },
+    {
+      where: {
+        id: goodId
+      }
+    }
+  );
+  return result;
+}
+
 module.exports = {
   newGoodInfo,
-  getAllGoods
+  getAllGoods,
+  updateGoodInfo,
+  getGoodInfoById
 };

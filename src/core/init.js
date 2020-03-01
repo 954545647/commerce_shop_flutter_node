@@ -91,7 +91,7 @@ class InitApp {
    *
    */
   static initMessageQueue() {
-    global.orderLoop = new Array(30);
+    global.orderLoop = new Array(3000);
     global.orderMap = new Map(); // 记录每个uid的slotIndex
     global.currentSlotIndex = 1; // 当前要检测的slot
     // 开启轮询

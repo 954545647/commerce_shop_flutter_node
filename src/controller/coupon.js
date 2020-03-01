@@ -17,21 +17,6 @@ const {
 async function getAllCoupons() {
   const result = await getCoupons();
   if (result) {
-    // let coupons = [];
-    // result.forEach(data => {
-    //   if (
-    //     data &&
-    //     data.dataValues &&
-    //     data.dataValues.Coupon_Info &&
-    //     data.dataValues.Coupon_Info.dataValues
-    //   ) {
-    //     // 这里对数据进行一个处理，将合并查找的 Coupon_Info 信息提取出来(更美观)
-    //     let couponInfo = data.dataValues.Coupon_Info.dataValues;
-    //     Object.assign(data.dataValues, couponInfo);
-    //     delete data.dataValues.Coupon_Info;
-    //     coupons.push(data.dataValues);
-    //   }
-    // });
     return new global.succ.SuccessModel({ data: result });
   } else {
     return new global.errs.searchInfoFail();

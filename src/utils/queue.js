@@ -46,7 +46,7 @@ function startOrderInterval() {
       slotSet.clear();
     }
     // 指标继续+1
-    global.currentSlotIndex = ++global.currentSlotIndex % 31;
+    global.currentSlotIndex = ++global.currentSlotIndex % 3001;
   }, 1000);
 }
 

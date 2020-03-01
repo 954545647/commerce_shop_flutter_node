@@ -3,7 +3,12 @@
  */
 const router = require("koa-router")();
 const Auth = require("@middlewares/auth");
-const { newGood, getAlls } = require("@controller/goods");
+const {
+  newGood,
+  getAlls,
+  updateInfo,
+  getGoodDetail
+} = require("@controller/goods");
 const { NewGoodValidator } = require("@validators/good");
 router.prefix("/goods"); // 前缀
 
@@ -38,6 +43,31 @@ router.post("/new", new Auth().token, async ctx => {
     from,
     supplierId
   });
+});
+
+// 更新商品信息
+router.post("/update", new Auth().token, async ctx => {
+  const { goodInfo } = ctx.request.body;
+  ctx.body = await updateInfo(goodInfo);
+});
+
+// 获取商品详细信息
+router.post("/getInfo", async ctx => {
+  const { goodId } = ctx.request.body;
+  ctx.body = await getGoodDetail(goodId);
+});
+
+router.post("/saveId", async ctx => {
+  const { goodId } = ctx.request.body;
+  global.errs.goodId = goodId;
+  ctx.body = {
+    msg: "save ok"
+  };
+});
+
+router.get("/getId", async ctx => {
+  let id = global.errs.goodId || 0;
+  ctx.body = id;
 });
 
 module.exports = router;

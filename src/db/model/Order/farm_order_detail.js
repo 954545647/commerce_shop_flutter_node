@@ -1,55 +1,55 @@
 /**
- * @description 订单详情模型表
+ * @description 农场订单详情模型表
  */
 
 const seq = require("@db/seq");
 const { Model } = require("sequelize");
 const { STRING, INTEGER } = require("@config/types");
 
-class Order_Detail extends Model {}
+class Farm_Order_Detail extends Model {}
 
 // 订单详情表
-Order_Detail.init(
+Farm_Order_Detail.init(
   {
     orderId: {
       type: INTEGER,
       allowNull: false,
       comment: "订单表id"
     },
-    goodId: {
+    cropId: {
       type: INTEGER,
       allowNull: false,
-      comment: "商品id"
+      comment: "农作物id"
     },
-    supplierId: {
+    farmId: {
       type: INTEGER,
       allowNull: false,
-      comment: "供应商id"
+      comment: "农场id"
     },
     order_username: {
       type: STRING,
       allowNull: false,
       comment: "下单人姓名"
     },
-    good_cover: {
+    crop_cover: {
       type: STRING,
       allowNull: false,
-      comment: "商品封面"
+      comment: "农作物封面"
     },
-    good_name: {
+    crop_name: {
       type: STRING,
       allowNull: false,
-      comment: "商品名称"
+      comment: "农作物名称"
     },
-    good_count: {
+    crop_count: {
       type: INTEGER,
       allowNull: false,
-      comment: "商品数量"
+      comment: "农作物数量"
     },
-    good_price: {
+    crop_price: {
       type: INTEGER,
       allowNull: false,
-      comment: "商品单价"
+      comment: "农作物单价"
     }
   },
   {
@@ -57,4 +57,4 @@ Order_Detail.init(
   }
 );
 
-module.exports = Order_Detail;
+module.exports = Farm_Order_Detail;

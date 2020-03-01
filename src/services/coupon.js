@@ -10,14 +10,6 @@ const { Coupon_Info, Coupon_History } = require("@db/model");
 async function getCoupons() {
   // 联合查询
   const result = await Coupon_Info.findAll();
-  // const result = await Coupon_History.findAll({
-  //   include: [
-  //     {
-  //       model: Coupon_Info,
-  //       attributes: ["name", "type", "with_amount", "used_amount"]
-  //     }
-  //   ]
-  // });
   return result;
 }
 

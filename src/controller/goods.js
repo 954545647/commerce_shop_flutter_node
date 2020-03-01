@@ -2,7 +2,12 @@
  * @description good Controller
  */
 
-const { newGoodInfo, getAllGoods } = require("@services/goods");
+const {
+  newGoodInfo,
+  getAllGoods,
+  getGoodInfoById,
+  updateGoodInfo
+} = require("@services/goods");
 
 /**
  * 获取所有商品
@@ -30,6 +35,19 @@ async function getAlls(id) {
       }
     });
     return new global.succ.SuccessModel({ data: goodInfo });
+  } else {
+    return new global.errs.searchInfoFail();
+  }
+}
+
+/**
+ * 根据商品id获取详情
+ * @param {int} id
+ */
+async function getGoodDetail(id) {
+  let result = await getGoodInfoById(id);
+  if (result) {
+    return new global.succ.SuccessModel({ data: result });
   } else {
     return new global.errs.searchInfoFail();
   }
@@ -68,7 +86,31 @@ async function newGood({
   }
 }
 
+/**
+ * 更新商品信息
+ * @param {int} goodId
+ * @param {int} count
+ */
+async function updateInfo(goodInfo) {
+  for (let i = 0; i < goodInfo.length; i++) {
+    let result = await getGoodInfoById(goodInfo[i].goodId);
+    let stock;
+    let sales;
+    if (result && result.dataValues) {
+      stock = result.dataValues.stock - goodInfo[i].count;
+      sales = result.dataValues.sales + goodInfo[i].count;
+    }
+    let res = await updateGoodInfo(goodInfo[i].goodId, stock, sales);
+    if (!res) {
+      return new global.errs.updateInfoFail();
+    }
+  }
+  return new global.succ.SuccessModel({ msg: "更新成功" });
+}
+
 module.exports = {
   getAlls,
-  newGood
+  newGood,
+  updateInfo,
+  getGoodDetail
 };
