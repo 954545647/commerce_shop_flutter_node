@@ -6,7 +6,8 @@ const {
   getFarmInfoById,
   getAllFarmsInfo,
   createFarmOrder,
-  createFarmOrderDetail
+  createFarmOrderDetail,
+  getMyFarmsInfo
 } = require("@services/farm");
 
 /**
@@ -83,8 +84,22 @@ async function newFarmOrder({
   }
 }
 
+/**
+ * 获取用户租地信息
+ * @param {int} userId
+ */
+async function getMyFarm(userId) {
+  const result = await getMyFarmsInfo(userId);
+  if (result) {
+    return new global.succ.SuccessModel({ data: result });
+  } else {
+    return new global.errs.searchInfoFail();
+  }
+}
+
 module.exports = {
   getFarmInfo,
   getAllFarms,
-  newFarmOrder
+  newFarmOrder,
+  getMyFarm
 };

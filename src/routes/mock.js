@@ -79,6 +79,12 @@ router.get("/mock", async ctx => {
     with_amount: 100,
     used_amount: 20
   });
+  await newCoupon({
+    name: "满20-2",
+    type: 0,
+    with_amount: 20,
+    used_amount: 2
+  });
   // 新增农场作物关系
   await createFarmCrop(1, 1);
   await createFarmCrop(1, 2);
@@ -94,7 +100,8 @@ router.get("/mock", async ctx => {
     preArea: 10,
     imgCover:
       "https://greenadoption.cn/tempImages/25bba4afda1e43a7a5fdbb4c5b9a2496.jpg",
-    address: "广东省广州市天河区华南农业大学华山区第17栋学生宿舍"
+    address: "广东省广州市天河区华南农业大学华山区第17栋学生宿舍",
+    monitor: "https://greenadoption.cn/tempImages/example.mp4"
   });
   await createFarmInfo({
     supplierId: 2,
@@ -106,7 +113,8 @@ router.get("/mock", async ctx => {
     preArea: 30,
     imgCover:
       "https://greenadoption.cn/tempImages/25bba4afda1e43a7a5fdbb4c5b9a2496.jpg",
-    address: "广东省广州市天河区华南农业大学华山区第17栋学生宿舍"
+    address: "广东省广州市天河区华南农业大学华山区第17栋学生宿舍",
+    monitor: "https://www.runoob.com/try/demo_source/mov_bbb.mp4"
   });
   // 新增农作物
   await createCropInfo({

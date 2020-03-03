@@ -2,7 +2,12 @@
  * @description 租地路由
  */
 const router = require("koa-router")();
-const { getFarmInfo, getAllFarms, newFarmOrder } = require("@controller/farm");
+const {
+  getFarmInfo,
+  getAllFarms,
+  getMyFarm,
+  newFarmOrder
+} = require("@controller/farm");
 const Auth = require("@middlewares/auth");
 router.prefix("/farm");
 
@@ -41,4 +46,9 @@ router.post("/newOrder", new Auth().token, async ctx => {
   });
 });
 
+// 获取我的农场
+router.get("/myFarm", new Auth().token, async ctx => {
+  const userId = ctx.auth.id;
+  ctx.body = await getMyFarm(userId);
+});
 module.exports = router;

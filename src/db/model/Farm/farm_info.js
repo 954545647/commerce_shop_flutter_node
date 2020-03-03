@@ -55,6 +55,11 @@ Farm_Info.init(
       type: STRING,
       allowNull: false,
       comment: "农场地址"
+    },
+    monitor: {
+      type: STRING,
+      allowNull: true,
+      comment: "农场直播地址"
     }
   },
   {

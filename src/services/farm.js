@@ -67,6 +67,22 @@ async function getFarmInfoById(id) {
 }
 
 /**
+ * 获取用户租地信息
+ * @param {int} userId
+ */
+async function getMyFarmsInfo(userId) {
+  const result = await Farm_Order.findAll({
+    where: {
+      userId
+    },
+    include: {
+      model: Farm_Order_Detail
+    }
+  });
+  return result;
+}
+
+/**
  * 获取农场的农作物
  * @param {int} id
  */
@@ -103,7 +119,8 @@ async function createFarmInfo({
   remainNum,
   preArea,
   imgCover,
-  address
+  address,
+  monitor
 }) {
   const result = await Farm_Info.create({
     supplierId,
@@ -114,7 +131,8 @@ async function createFarmInfo({
     remainNum,
     preArea,
     imgCover,
-    address
+    address,
+    monitor
   });
   return result;
 }
@@ -183,5 +201,6 @@ module.exports = {
   createFarmCrop,
   getFarmCrops,
   createFarmOrder,
-  createFarmOrderDetail
+  createFarmOrderDetail,
+  getMyFarmsInfo
 };

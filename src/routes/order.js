@@ -11,7 +11,6 @@ const { doAction } = require("@utils/queue");
 // 开启延时任务
 router.post("/startTask", new Auth().token, async ctx => {
   const { orderId } = ctx.request.body;
-  console.log(`加入队列${orderId}`);
   if (orderId) {
     doAction(orderId);
   }

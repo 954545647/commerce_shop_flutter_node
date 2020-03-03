@@ -31,11 +31,12 @@ async function getUserInfo(username, password) {
  */
 async function getUserInfoById(id) {
   const result = await User_Info.findOne({
-    attributes: ["id", "username", "phone", "point", "createdAt"],
+    attributes: ["id", "username", "phone", "point", "password", "createdAt"],
     where: {
       id
     }
   });
+  console.log(result.dataValues);
   return result;
 }
 

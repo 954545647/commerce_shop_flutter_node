@@ -38,7 +38,7 @@ function startOrderInterval() {
         // 取出订单id，查询数据库该订单的状态，如果状态为未支付则变成失效状态
         checkOrderState(orderId);
         // 到时写入日志
-        console.log(`<订单${orderId}>超过5min未支付，失效！`);
+        // console.log(`<订单${orderId}>超过5min未支付，失效！`);
         // 执行完的orderId从map集合中剔除
         orderMap.delete(orderId);
       }
@@ -46,7 +46,7 @@ function startOrderInterval() {
       slotSet.clear();
     }
     // 指标继续+1
-    global.currentSlotIndex = ++global.currentSlotIndex % 3001;
+    global.currentSlotIndex = ++global.currentSlotIndex % 301;
   }, 1000);
 }
 
