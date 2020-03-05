@@ -5,9 +5,12 @@
 const {
   getAllSuppliers,
   newSupplierInfo,
+  getSupplierInfo,
   getSupplierInfoByGoodId,
   getSupplierInfoBySupplierId
 } = require("@services/supplier");
+
+const doCrypto = require("@utils/cryp.js");
 
 /**
  * 获取商家信息
@@ -46,22 +49,63 @@ async function getSupplierInfoById(goodId, supplierId) {
  * 新增供应商
  * @param {string | int} param0 供应商信息
  */
-async function newSupplier({ name, phone, address, cover }) {
-  const supplierInfo = await newSupplierInfo({
-    name,
-    phone,
-    address,
-    cover
-  });
+async function newSupplier({
+  username,
+  password,
+  phone,
+  idNum,
+  frontImg,
+  backImg
+}) {
+  const supplierInfo = await getSupplierInfo(username);
   if (supplierInfo) {
-    return new global.succ.SuccessModel({ data: supplierInfo });
-  } else {
-    return new global.errs.createInfoFail();
+    // 用户名已存在
+    return new global.errs.registerUserExist();
   }
+  try {
+    let supplierInfo = await newSupplierInfo({
+      username,
+      password: doCrypto(password),
+      phone,
+      idNum,
+      frontImg,
+      backImg
+    });
+    return new global.succ.SuccessModel({ data: supplierInfo });
+  } catch (error) {
+    console.error(error);
+    return new global.errs.registerFailInfo();
+  }
+}
+
+/**
+ * 商家注册
+ * @param {string} username
+ * @param {string} password
+ */
+async function registerLogin(username, password) {
+  // 获取用户信息
+  const supplierInfo = await getSupplierInfo(username);
+  if (!supplierInfo) {
+    return new global.errs.userNotExit();
+  }
+  // 登录失败：用户密码不存在
+  if (
+    supplierInfo &&
+    supplierInfo.dataValues &&
+    supplierInfo.dataValues.password
+  ) {
+    let pass = supplierInfo.dataValues.password;
+    if (doCrypto(password) != pass) {
+      return new global.errs.userPassError();
+    }
+  }
+  return new global.succ.SuccessModel({ data: supplierInfo.dataValues });
 }
 
 module.exports = {
   getSuppliersInfo,
   newSupplier,
-  getSupplierInfoById
+  getSupplierInfoById,
+  registerLogin
 };

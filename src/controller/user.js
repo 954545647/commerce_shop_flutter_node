@@ -64,7 +64,7 @@ async function login(username, password) {
   if (!userInfo) {
     return new global.errs.userNotExit();
   }
-  // 登录失败：用户密码不存在
+  // 登录失败：用户密码错误
   if (userInfo && userInfo.dataValues && userInfo.dataValues.password) {
     let pass = userInfo.dataValues.password;
     if (doCrypto(password) != pass) {

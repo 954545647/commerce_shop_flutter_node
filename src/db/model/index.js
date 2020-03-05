@@ -18,7 +18,6 @@ const Farm_Order_Detail = require("./Order/farm_order_detail");
 // 商品
 const Good_Supplier = require("./Good/good_supplier");
 const Good_Info = require("./Good/good_info");
-const Good_Comment = require("./Good/good_comment");
 // 农场
 const Farm_Info = require("./Farm/farm_info.js");
 const Farm_Crop = require("./Farm/farm_crop.js");
@@ -74,11 +73,6 @@ Good_Info.belongsTo(Good_Supplier, {
   targetKey: "id"
 });
 
-// 商品信息表和商品评价表
-Good_Comment.belongsTo(Good_Info, {
-  foreignKey: "goodId"
-});
-
 // 购物车表和商品信息表
 Order_Cart.belongsTo(Good_Info, {
   foreignKey: "goodId"
@@ -123,7 +117,6 @@ module.exports = {
   Farm_Order_Detail,
   Good_Supplier,
   Good_Info,
-  Good_Comment,
   Order_Cart,
   Farm_Crop,
   Farm_Info,

@@ -14,6 +14,7 @@ router.prefix("/goods"); // 前缀
 
 // 获取所有商品(可兼容传递id，获取该供应商id下的所有商品)
 router.post("/getAlls", async ctx => {
+  console.log(444);
   const { id = null } = ctx.request.body;
   ctx.body = await getAlls(id);
 });

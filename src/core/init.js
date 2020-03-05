@@ -5,10 +5,13 @@
 const requireDirectory = require("require-directory");
 const Router = require("koa-router");
 const bodyParser = require("koa-bodyparser");
+const koaStatic = require("koa-static");
 const catchError = require("@middlewares/exception.js");
+const koaBody = require("koa-body");
 const { startOrderInterval } = require("@utils/queue");
 const { ERROR_OPTIONS } = require("@config");
 const onError = require("koa-onerror");
+const path = require("path"); //路径管理
 
 class InitApp {
   /**
@@ -50,7 +53,19 @@ class InitApp {
    */
   static initMiddleWares() {
     onError(InitApp.app, ERROR_OPTIONS);
-    InitApp.app.use(bodyParser());
+    // InitApp.app.use(bodyParser());
+    // { enableTypes: ["json", "form", "text"]}
+    // 初始化静态资源服务器
+    InitApp.app.use(
+      koaBody({
+        multipart: true,
+        keepExtensions: true, // 保持文件的后缀
+        formidable: {
+          maxFieldsSize: 500 * 1024 * 1024
+        }
+      })
+    );
+    InitApp.app.use(koaStatic(path.join(__dirname, "../static")));
     InitApp.app.use(catchError);
   }
 

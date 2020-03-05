@@ -16,25 +16,35 @@ Good_Supplier.init(
       primaryKey: true,
       autoIncrement: true
     },
-    supplierName: {
+    username: {
       type: STRING,
       allowNull: false,
-      comment: "供应商名称"
+      comment: "供应商帐号"
+    },
+    password: {
+      type: STRING,
+      allowNull: false,
+      comment: "供应商密码"
     },
     phone: {
       type: STRING,
       allowNull: false,
       comment: "供应商电话"
     },
-    address: {
+    idNum: {
       type: STRING,
       allowNull: false,
-      comment: "供应商地址"
+      comment: "身份证号码"
     },
-    cover: {
+    frontImg: {
       type: STRING,
       allowNull: false,
-      comment: "供应商封面"
+      comment: "身份证正面"
+    },
+    backImg: {
+      type: STRING,
+      allowNull: false,
+      comment: "身份证反面"
     }
   },
   {

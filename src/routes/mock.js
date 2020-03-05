@@ -22,7 +22,7 @@ router.get("/mock", async ctx => {
   });
   // 新增供应商
   await newSupplier({
-    name: "头盔汉堡",
+    username: "头盔汉堡",
     phone: "13250504940",
     address: "广东揭阳",
     cover:

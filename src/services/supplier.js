@@ -13,6 +13,19 @@ async function getAllSuppliers() {
 }
 
 /**
+ * 获取商家信息
+ * @param {string} username
+ */
+async function getSupplierInfo(username) {
+  const result = await Good_Supplier.findOne({
+    where: {
+      username
+    }
+  });
+  return result;
+}
+
+/**
  * 通过商品id获取商家信息
  * @param {int} goodId
  */
@@ -53,18 +66,34 @@ async function getSupplierInfoBySupplierId(id) {
  * 新增供应商信息
  * @param {string | int} param0 供应商的信息
  */
-async function newSupplierInfo({ name, phone, address, cover }) {
+async function newSupplierInfo({
+  username,
+  password,
+  phone,
+  idNum,
+  frontImg,
+  backImg
+}) {
+  if (frontImg.toString().indexOf("127") != -1) {
+    frontImg = frontImg.toString().slice(15);
+  }
+  if (backImg.toString().indexOf("127") != -1) {
+    backImg = backImg.toString().slice(15);
+  }
   const result = await Good_Supplier.create({
-    supplierName: name,
+    username,
+    password,
     phone,
-    address,
-    cover
+    idNum,
+    frontImg,
+    backImg
   });
   return result;
 }
 
 module.exports = {
   getAllSuppliers,
+  getSupplierInfo,
   newSupplierInfo,
   getSupplierInfoByGoodId,
   getSupplierInfoBySupplierId
