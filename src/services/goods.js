@@ -3,6 +3,7 @@
  */
 
 const { Good_Info, Good_Supplier } = require("@db/model");
+const { cutPath } = require("@utils/util");
 
 /**
  * 查找数据库中所有的商品信息(包括商家信息)
@@ -51,7 +52,9 @@ async function newGoodInfo({
   from,
   supplierId
 }) {
+  imgCover = cutPath(imgCover);
   const result = await Good_Info.create({
+    supplierId,
     goodName,
     price,
     descript,
@@ -59,8 +62,7 @@ async function newGoodInfo({
     imgCover,
     sales,
     expressCost,
-    from,
-    supplierId
+    from
   });
   return result;
 }

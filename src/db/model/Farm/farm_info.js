@@ -46,6 +46,11 @@ Farm_Info.init(
       allowNull: false,
       comment: "每块租地面积（单位m2）"
     },
+    preMoney: {
+      type: INTEGER,
+      allowNull: false,
+      comment: "土地单位租金（单位m2）"
+    },
     imgCover: {
       type: STRING,
       allowNull: false,
@@ -60,6 +65,12 @@ Farm_Info.init(
       type: STRING,
       allowNull: true,
       comment: "农场直播地址"
+    },
+    status: {
+      type: INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+      comment: "农场状态：0（未上线）1（上线）"
     }
   },
   {

@@ -7,7 +7,12 @@ const {
   getAllFarmsInfo,
   createFarmOrder,
   createFarmOrderDetail,
-  getMyFarmsInfo
+  getMyFarmsInfo,
+  createFarmInfo,
+  getSupplierFarms,
+  createCropInfo,
+  createFarmCrop,
+  updateFarmState
 } = require("@services/farm");
 
 /**
@@ -97,9 +102,84 @@ async function getMyFarm(userId) {
   }
 }
 
+/**
+ * 获取商家的农场
+ * @param {int} id
+ */
+async function getSupplierFarm(id) {
+  const farmInfo = await getSupplierFarms(id);
+  if (farmInfo) {
+    return new global.succ.SuccessModel({ data: farmInfo });
+  } else {
+    return new global.errs.searchInfoFail();
+  }
+}
+
+/**
+ * 新增农场
+ * @param {int|string} param0
+ */
+async function newFarm({
+  supplierId,
+  farmName,
+  descript,
+  tags,
+  totalNum,
+  remainNum,
+  preArea,
+  preMoney,
+  imgCover,
+  address,
+  monitor
+}) {
+  const farmInfo = await createFarmInfo({
+    supplierId,
+    farmName,
+    descript,
+    tags,
+    totalNum,
+    remainNum,
+    preArea,
+    preMoney,
+    imgCover,
+    address,
+    monitor
+  });
+  if (farmInfo) {
+    return new global.succ.SuccessModel({ data: farmInfo });
+  } else {
+    return new global.errs.createInfoFail();
+  }
+}
+
+/**
+ * 新增农作物
+ * @param {int|string} param0
+ */
+async function newCrop({ cropName, descript, price, imgCover, farmId }) {
+  const cropInfo = await createCropInfo({
+    cropName,
+    descript,
+    price,
+    imgCover
+  });
+  if (cropInfo) {
+    // 创建农场和作物关系
+    await createFarmCrop(farmId, cropInfo.dataValues.id);
+    // 修改农场状态
+    await updateFarmState(farmId);
+    return new global.succ.SuccessModel({ data: cropInfo });
+  } else {
+    return new global.errs.createInfoFail();
+  }
+}
+
 module.exports = {
   getFarmInfo,
   getAllFarms,
   newFarmOrder,
-  getMyFarm
+  getMyFarm,
+  newFarm,
+  getSupplierFarm,
+  newCrop
 };

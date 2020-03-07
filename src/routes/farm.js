@@ -6,7 +6,10 @@ const {
   getFarmInfo,
   getAllFarms,
   getMyFarm,
-  newFarmOrder
+  newFarmOrder,
+  newFarm,
+  getSupplierFarm,
+  newCrop
 } = require("@controller/farm");
 const Auth = require("@middlewares/auth");
 router.prefix("/farm");
@@ -46,9 +49,57 @@ router.post("/newOrder", new Auth().token, async ctx => {
   });
 });
 
-// 获取我的农场
-router.get("/myFarm", new Auth().token, async ctx => {
+// 获取我的土地订单
+router.get("/userFarmOrder", new Auth().token, async ctx => {
   const userId = ctx.auth.id;
   ctx.body = await getMyFarm(userId);
+});
+
+// 获取商家的农场
+router.post("/supplierFarm", async ctx => {
+  const { id } = ctx.request.body;
+  ctx.body = await getSupplierFarm(id);
+});
+
+// 新增土地
+router.post("/newFarm", async ctx => {
+  const {
+    supplierId,
+    farmName,
+    descript,
+    tags,
+    totalNum,
+    remainNum = totalNum,
+    preArea,
+    preMoney,
+    imgCover,
+    address,
+    monitor
+  } = ctx.request.body;
+  ctx.body = await newFarm({
+    supplierId,
+    farmName,
+    descript,
+    tags,
+    totalNum,
+    remainNum,
+    preArea,
+    preMoney,
+    imgCover,
+    address,
+    monitor
+  });
+});
+
+// 新增农作物
+router.post("/newCrop", async ctx => {
+  const { cropName, descript, price, imgCover, farmId } = ctx.request.body;
+  ctx.body = await newCrop({
+    cropName,
+    descript,
+    price,
+    imgCover,
+    farmId
+  });
 });
 module.exports = router;

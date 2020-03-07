@@ -91,13 +91,13 @@ Farm_Crop.hasMany(Crop_Info, {
   foreignKey: "cropId"
 });
 
-Farm_Info.belongsTo(Farm_Crop, {
-  foreignKey: "id"
-});
+// Farm_Info.belongsTo(Farm_Crop, {
+//   foreignKey: "id"
+// });
 
-Crop_Info.belongsTo(Farm_Crop, {
-  foreignKey: "id"
-});
+// Crop_Info.belongsTo(Farm_Crop, {
+//   foreignKey: "id"
+// });
 
 // 农场信息表和商品供应商表
 Farm_Info.belongsTo(Good_Supplier, {

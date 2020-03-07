@@ -3,6 +3,7 @@
  */
 
 const { Good_Supplier, Good_Info } = require("@db/model");
+const { cutPath } = require("@utils/util");
 
 /**
  * 获取所有商家信息
@@ -74,12 +75,8 @@ async function newSupplierInfo({
   frontImg,
   backImg
 }) {
-  if (frontImg.toString().indexOf("127") != -1) {
-    frontImg = frontImg.toString().slice(15);
-  }
-  if (backImg.toString().indexOf("127") != -1) {
-    backImg = backImg.toString().slice(15);
-  }
+  frontImg = cutPath(frontImg);
+  backImg = cutPath(backImg);
   const result = await Good_Supplier.create({
     username,
     password,

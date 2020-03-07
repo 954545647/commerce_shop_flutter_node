@@ -35,6 +35,11 @@ const findFields = function(instance, { filter }) {
   return _find(instance);
 };
 
+/**
+ * 修改积分
+ * @param {int} old
+ * @param {int} source
+ */
 const changeIntegral = function(old, source) {
   if (source === 1) {
     // 签到
@@ -50,7 +55,23 @@ const changeIntegral = function(old, source) {
   }
 };
 
+/**
+ * 修改图片路径
+ * @param {string} str
+ */
+const cutPath = function(str) {
+  str = str.toString();
+  if (str.indexOf("127") != -1) {
+    str = str.slice(15);
+  }
+  if (str.indexOf("47") != -1) {
+    str = str.slice(15);
+  }
+  return str;
+};
+
 module.exports = {
   findFields,
-  changeIntegral
+  changeIntegral,
+  cutPath
 };

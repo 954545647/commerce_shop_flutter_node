@@ -10,6 +10,7 @@ const {
   Farm_Order,
   Farm_Order_Detail
 } = require("@db/model");
+const { cutPath } = require("@utils/util");
 
 /**
  * 获取全部农场信息
@@ -82,6 +83,15 @@ async function getMyFarmsInfo(userId) {
   return result;
 }
 
+async function getSupplierFarms(id) {
+  const result = await Farm_Info.findAll({
+    where: {
+      supplierId: id
+    }
+  });
+  return result;
+}
+
 /**
  * 获取农场的农作物
  * @param {int} id
@@ -118,10 +128,12 @@ async function createFarmInfo({
   totalNum,
   remainNum,
   preArea,
+  preMoney,
   imgCover,
   address,
   monitor
 }) {
+  imgCover = cutPath(imgCover);
   const result = await Farm_Info.create({
     supplierId,
     farmName,
@@ -130,6 +142,7 @@ async function createFarmInfo({
     totalNum,
     remainNum,
     preArea,
+    preMoney,
     imgCover,
     address,
     monitor
@@ -138,10 +151,29 @@ async function createFarmInfo({
 }
 
 /**
+ * 修改农场状态
+ * @param {int} farmId
+ */
+async function updateFarmState(farmId) {
+  const result = await Farm_Info.update(
+    {
+      status: 1
+    },
+    {
+      where: {
+        id: farmId
+      }
+    }
+  );
+  return result;
+}
+
+/**
  * 创建农作物
  * @param {int|string} param0
  */
 async function createCropInfo({ cropName, price, descript, imgCover }) {
+  imgCover = cutPath(imgCover);
   const result = await Crop_Info.create({
     cropName,
     price,
@@ -202,5 +234,7 @@ module.exports = {
   getFarmCrops,
   createFarmOrder,
   createFarmOrderDetail,
-  getMyFarmsInfo
+  getMyFarmsInfo,
+  getSupplierFarms,
+  updateFarmState
 };

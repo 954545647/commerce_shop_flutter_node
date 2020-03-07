@@ -19,7 +19,6 @@ class NewGoodValidator extends Validator {
       gt: -1,
       lt: 100001
     });
-    this.sales = this.stock;
     this.expressCost = this.stock;
     this.supplierId = this.stock;
     this.descript = new Rule("isLength", "商品描述长度必须在1-200之间", {

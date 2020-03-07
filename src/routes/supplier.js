@@ -6,6 +6,7 @@ const path = require("path"); //路径管理
 const fs = require("fs"); //路径管理
 const { BASEURL } = require("@config");
 router.prefix("/supplier"); // 前缀
+
 const {
   getSuppliersInfo,
   newSupplier,
@@ -33,6 +34,7 @@ router.post("/register", async ctx => {
   });
 });
 
+// 商家登录
 router.post("/login", async ctx => {
   const { username, password } = ctx.request.body;
   ctx.body = await registerLogin(username, password);
