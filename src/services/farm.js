@@ -71,7 +71,7 @@ async function getFarmInfoById(id) {
  * 获取用户租地信息
  * @param {int} userId
  */
-async function getMyFarmsInfo(userId) {
+async function getUserFarmsInfo(userId) {
   const result = await Farm_Order.findAll({
     where: {
       userId
@@ -83,6 +83,10 @@ async function getMyFarmsInfo(userId) {
   return result;
 }
 
+/**
+ * 获取商家的农场信息
+ * @param {int} id
+ */
 async function getSupplierFarms(id) {
   const result = await Farm_Info.findAll({
     where: {
@@ -234,7 +238,7 @@ module.exports = {
   getFarmCrops,
   createFarmOrder,
   createFarmOrderDetail,
-  getMyFarmsInfo,
+  getUserFarmsInfo,
   getSupplierFarms,
   updateFarmState
 };

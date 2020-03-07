@@ -13,15 +13,21 @@ const {
 } = require("@services/farm");
 
 router.get("/mock1", async ctx => {
-  await newSupplier({
+  // 注册
+  await register({
     username: "123",
     password: "123",
-    phone: "13250504940",
-    idNum: "122",
-    frontImg: "xasa",
-    backImg:
-      "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=847580354,2285435867&fm=26&gp=0.jpg"
+    phone: "13250504940"
   });
+  // await newSupplier({
+  //   username: "123",
+  //   password: "123",
+  //   phone: "13250504940",
+  //   idNum: "122",
+  //   frontImg: "xasa",
+  //   backImg:
+  //     "https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=847580354,2285435867&fm=26&gp=0.jpg"
+  // });
   ctx.body = {
     msg: "成功"
   };

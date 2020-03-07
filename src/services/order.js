@@ -2,7 +2,12 @@
  * @description 订单 services
  */
 
-const { Order_Detail, Order_Info } = require("@db/model");
+const {
+  Order_Detail,
+  Order_Info,
+  Farm_Order,
+  Farm_Order_Detail
+} = require("@db/model");
 
 /**
  * 创建订单主表
@@ -108,10 +113,86 @@ async function getUserOrders(userId) {
   return result;
 }
 
+/**
+ * 获取商家认养订单
+ * @param {int} userId
+ */
+async function getSupplierGoodOrders(supplierId) {
+  let result = await Order_Detail.findAll({
+    where: {
+      supplierId
+    }
+  });
+  return result;
+}
+
+/**
+ * 获取商家全部土地订单
+ * @param {int} supplierId
+ */
+async function getSupplierFarmOrders(supplierId) {
+  let result = await Farm_Order.findAll({
+    where: {
+      id: supplierId
+    }
+  });
+  return result;
+}
+
+/**
+ * 获取商家全部土地详情订单
+ * @param {int} supplierId
+ */
+async function getSupplierFarmOrderDetails(supplierId) {
+  let result = await Farm_Order_Detail.findAll({
+    where: {
+      supplierId: supplierId
+    }
+  });
+  return result;
+}
+
+/**
+ * 获取商品订单详情
+ * @param {int} orderId
+ */
+async function getGoodOrderDetail(orderId) {
+  let result = await Order_Info.findAll({
+    where: {
+      id: orderId
+    },
+    include: [
+      {
+        model: Order_Detail
+      }
+    ]
+  });
+  return result;
+}
+
+/**
+ * 获取租地订单详情
+ * @param {int} orderId
+ */
+async function getFarmOrderDetail(orderId) {
+  let result = await Farm_Order.findAll({
+    where: {
+      id: orderId
+    },
+    include: [{ model: Farm_Order_Detail }]
+  });
+  return result;
+}
+
 module.exports = {
   checkOrderState,
   createOrderInfo,
   createOrderDetail,
   getUserOrders,
-  modifyOrderStatus
+  modifyOrderStatus,
+  getSupplierGoodOrders,
+  getSupplierFarmOrders,
+  getGoodOrderDetail,
+  getFarmOrderDetail,
+  getSupplierFarmOrderDetails
 };

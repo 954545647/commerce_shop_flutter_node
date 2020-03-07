@@ -16,6 +16,11 @@ Farm_Order_Detail.init(
       allowNull: false,
       comment: "订单表id"
     },
+    supplierId: {
+      type: INTEGER,
+      allowNull: false,
+      comment: "供应商id"
+    },
     cropId: {
       type: INTEGER,
       allowNull: false,

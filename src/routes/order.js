@@ -51,9 +51,9 @@ router.get("/all", new Auth().token, async ctx => {
   ctx.body = await getAllOrders(userId);
 });
 
+// 修改订单状态
 router.post("/modify", new Auth().token, async ctx => {
   const { orderId } = ctx.request.body;
-  console.log(orderId);
   ctx.body = await modifyStatus(orderId);
 });
 

@@ -14,7 +14,11 @@ const {
   newUserIntergral,
   getUserDefaultAddress
 } = require("@services/user");
+
+const { getUserFarmsInfo } = require("@services/farm");
+
 const doCrypto = require("@utils/cryp.js");
+
 const generateToken = require("@utils/token");
 /**
  * 查看用户名是否存在
@@ -120,7 +124,6 @@ async function getDefaultAddress(id) {
   const userAddress = await getUserDefaultAddress(id);
   if (userAddress) {
     let defaultAddress = userAddress.dataValues;
-    console.log(defaultAddress);
     return new global.succ.SuccessModel({ data: defaultAddress });
   } else {
     return new global.errs.searchInfoFail();
@@ -217,6 +220,19 @@ async function getUserTypeInfo(id, type) {
   }
 }
 
+/**
+ * 获取用户租地信息
+ * @param {int} userId
+ */
+async function getMyFarm(userId) {
+  const result = await getUserFarmsInfo(userId);
+  if (result) {
+    return new global.succ.SuccessModel({ data: result });
+  } else {
+    return new global.errs.searchInfoFail();
+  }
+}
+
 module.exports = {
   isExist,
   register,
@@ -227,5 +243,6 @@ module.exports = {
   changeIntegral,
   getUserSignDays,
   getUserTypeInfo,
-  getDefaultAddress
+  getDefaultAddress,
+  getMyFarm
 };

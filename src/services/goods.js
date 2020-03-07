@@ -87,9 +87,28 @@ async function updateGoodInfo(goodId, stock, sales) {
   return result;
 }
 
+/**
+ * 修改商品状态
+ * @param {int} goodId
+ */
+async function updateGoodState(goodId, status) {
+  const result = await Farm_Info.update(
+    {
+      status
+    },
+    {
+      where: {
+        id: goodId
+      }
+    }
+  );
+  return result;
+}
+
 module.exports = {
   newGoodInfo,
   getAllGoods,
   updateGoodInfo,
-  getGoodInfoById
+  getGoodInfoById,
+  updateGoodState
 };

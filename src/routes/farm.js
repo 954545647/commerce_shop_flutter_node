@@ -5,10 +5,8 @@ const router = require("koa-router")();
 const {
   getFarmInfo,
   getAllFarms,
-  getMyFarm,
   newFarmOrder,
   newFarm,
-  getSupplierFarm,
   newCrop
 } = require("@controller/farm");
 const Auth = require("@middlewares/auth");
@@ -35,7 +33,8 @@ router.post("/newOrder", new Auth().token, async ctx => {
     payMoney,
     address,
     cropsInfos,
-    orderUsername
+    orderUsername,
+    supplierId
   } = ctx.request.body;
   ctx.body = await newFarmOrder({
     userId,
@@ -45,20 +44,9 @@ router.post("/newOrder", new Auth().token, async ctx => {
     payMoney,
     address,
     cropsInfos,
-    orderUsername
+    orderUsername,
+    supplierId
   });
-});
-
-// 获取我的土地订单
-router.get("/userFarmOrder", new Auth().token, async ctx => {
-  const userId = ctx.auth.id;
-  ctx.body = await getMyFarm(userId);
-});
-
-// 获取商家的农场
-router.post("/supplierFarm", async ctx => {
-  const { id } = ctx.request.body;
-  ctx.body = await getSupplierFarm(id);
 });
 
 // 新增土地

@@ -9,7 +9,7 @@ const {
   updateInfo,
   getGoodDetail
 } = require("@controller/goods");
-const { NewGoodValidator } = require("@validators/good");
+// const { NewGoodValidator } = require("@validators/good");
 router.prefix("/goods"); // 前缀
 
 // 获取所有商品(可兼容传递id，获取该供应商id下的所有商品)

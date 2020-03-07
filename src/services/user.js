@@ -36,7 +36,6 @@ async function getUserInfoById(id) {
       id
     }
   });
-  console.log(result.dataValues);
   return result;
 }
 

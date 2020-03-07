@@ -11,7 +11,10 @@ const {
   getSuppliersInfo,
   newSupplier,
   registerLogin,
-  getSupplierInfoById
+  getSupplierInfoById,
+  getSupplierFarm,
+  getSupplierGood,
+  getSupplierOrder
 } = require("@controller/supplier");
 
 // 新增供应商
@@ -40,12 +43,12 @@ router.post("/login", async ctx => {
   ctx.body = await registerLogin(username, password);
 });
 
-// 获取供应商数据
+// 获取全部商家信息
 router.get("/getAll", async ctx => {
   ctx.body = await getSuppliersInfo();
 });
 
-// 获取供应商数据
+// 获取单个商家信息
 router.post("/getSupplierById", async ctx => {
   const { goodId = null, supplierId = null } = ctx.request.body;
   ctx.body = await getSupplierInfoById(goodId, supplierId);
@@ -62,6 +65,24 @@ router.post("/upload", async ctx => {
   const upStream = fs.createWriteStream(`${staticPath}/${basename}.${ext}`); // 创建可写流
   reader.pipe(upStream); // 可读流通过管道写入可写流
   ctx.body = { url: `${BASEURL}/${basename}.${ext}` };
+});
+
+// 获取商家的发布的商品
+router.post("/goods", async ctx => {
+  const { id } = ctx.request.body; // 商家id
+  ctx.body = await getSupplierGood(id);
+});
+
+// 获取商家发布的农场
+router.post("/farms", async ctx => {
+  const { id } = ctx.request.body;
+  ctx.body = await getSupplierFarm(id);
+});
+
+// 获取商家的全部订单
+router.post("/orders", async ctx => {
+  const { supplierId } = ctx.request.body;
+  ctx.body = await getSupplierOrder(supplierId);
 });
 
 module.exports = router;

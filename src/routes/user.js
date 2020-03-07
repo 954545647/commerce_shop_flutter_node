@@ -14,7 +14,8 @@ const {
   changeIntegral,
   getUserSignDays,
   getUserTypeInfo,
-  getDefaultAddress
+  getDefaultAddress,
+  getMyFarm
 } = require("@controller/user");
 const Auth = require("@middlewares/auth");
 router.prefix("/user");
@@ -86,6 +87,12 @@ router.post("/changeIntegral", new Auth().token, async ctx => {
   const id = ctx.auth.id;
   const { source } = ctx.request.body;
   ctx.body = await changeIntegral(id, source);
+});
+
+// 获取用户土地订单
+router.get("/farmOrder", new Auth().token, async ctx => {
+  const userId = ctx.auth.id;
+  ctx.body = await getMyFarm(userId);
 });
 
 module.exports = router;

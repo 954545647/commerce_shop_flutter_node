@@ -57,6 +57,12 @@ Good_Info.init(
       type: STRING,
       allowNull: false,
       comment: "发源地"
+    },
+    status: {
+      type: INTEGER,
+      allowNull: true,
+      defaultValue: 1,
+      comment: "商品状态：0（未上线）1（上线）"
     }
   },
   {

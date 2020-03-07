@@ -7,9 +7,7 @@ const {
   getAllFarmsInfo,
   createFarmOrder,
   createFarmOrderDetail,
-  getMyFarmsInfo,
   createFarmInfo,
-  getSupplierFarms,
   createCropInfo,
   createFarmCrop,
   updateFarmState
@@ -50,7 +48,8 @@ async function newFarmOrder({
   payMoney,
   address,
   cropsInfos,
-  orderUsername
+  orderUsername,
+  supplierId
 }) {
   // 新增农场订单
   // 先创建主表
@@ -71,6 +70,7 @@ async function newFarmOrder({
         orderId,
         cropId: crop.id,
         farmId: farmId,
+        supplierId: supplierId,
         order_username: orderUsername,
         crop_cover: crop.imgCover,
         crop_name: crop.goodName,
@@ -86,32 +86,6 @@ async function newFarmOrder({
       // 获取失败
       return new global.errs.createOrderFail();
     }
-  }
-}
-
-/**
- * 获取用户租地信息
- * @param {int} userId
- */
-async function getMyFarm(userId) {
-  const result = await getMyFarmsInfo(userId);
-  if (result) {
-    return new global.succ.SuccessModel({ data: result });
-  } else {
-    return new global.errs.searchInfoFail();
-  }
-}
-
-/**
- * 获取商家的农场
- * @param {int} id
- */
-async function getSupplierFarm(id) {
-  const farmInfo = await getSupplierFarms(id);
-  if (farmInfo) {
-    return new global.succ.SuccessModel({ data: farmInfo });
-  } else {
-    return new global.errs.searchInfoFail();
   }
 }
 
@@ -178,8 +152,6 @@ module.exports = {
   getFarmInfo,
   getAllFarms,
   newFarmOrder,
-  getMyFarm,
   newFarm,
-  getSupplierFarm,
   newCrop
 };

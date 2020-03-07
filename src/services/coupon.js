@@ -73,7 +73,6 @@ async function checkCouponIfTake(userId, couponId) {
  */
 async function updateCounponUseHistory({ userId, couponId, orderId }) {
   let result;
-  console.log(userId, couponId, orderId);
   result = await Coupon_History.update(
     {
       use_state: 1,
