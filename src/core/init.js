@@ -4,14 +4,15 @@
 
 const requireDirectory = require("require-directory");
 const Router = require("koa-router");
-const bodyParser = require("koa-bodyparser");
 const koaStatic = require("koa-static");
 const catchError = require("@middlewares/exception.js");
 const koaBody = require("koa-body");
 const { startOrderInterval } = require("@utils/queue");
 const { ERROR_OPTIONS } = require("@config");
 const onError = require("koa-onerror");
+const views = require("koa-views");
 const path = require("path"); //路径管理
+// const bodyParser = require("koa-bodyparser");
 
 class InitApp {
   /**
@@ -21,6 +22,7 @@ class InitApp {
   static initCore(app) {
     InitApp.app = app;
     InitApp.initMiddleWares();
+    InitApp.loadTem(); // 加载模版引擎
     InitApp.initRouters();
     InitApp.initExceptions();
     InitApp.initErrorPage();
@@ -111,6 +113,18 @@ class InitApp {
     global.currentSlotIndex = 1; // 当前要检测的slot
     // 开启轮询
     startOrderInterval();
+  }
+
+  // 加载模版引擎
+  static loadTem() {
+    InitApp.app.use(
+      views(path.join(__dirname, "../", "./views"), {
+        // extension: "ejs",
+        map: {
+          html: "ejs"
+        }
+      })
+    );
   }
 }
 
