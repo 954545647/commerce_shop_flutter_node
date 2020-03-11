@@ -4,6 +4,7 @@
 
 const { User_Info, User_Address, User_Integral } = require("@db/model");
 const { changeIntegral } = require("@utils/util");
+const { cutPath } = require("@utils/util");
 /**
  * 查询数据中用户信息
  * @param {string} username
@@ -19,7 +20,7 @@ async function getUserInfo(username, password) {
   }
   // 查询
   const result = await User_Info.findOne({
-    attributes: ["id", "username", "phone", "password"],
+    attributes: ["id", "username", "phone", "password", "imgCover", "point"],
     where: whereOpt
   });
   return result;
@@ -118,6 +119,26 @@ async function modifyUser(id, password) {
 }
 
 /**
+ * 修改头像
+ * @param {int} id
+ * @param {sting} imgCover
+ */
+async function updateImgCover(id, imgCover) {
+  imgCover = cutPath(imgCover);
+  const res = await User_Info.update(
+    {
+      imgCover: imgCover
+    },
+    {
+      where: {
+        id
+      }
+    }
+  );
+  return res;
+}
+
+/**
  * 新增用户地址
  * @param {string} param0 地址参数
  */
@@ -192,5 +213,6 @@ module.exports = {
   changeUserIntegral,
   getUserIntegral,
   newUserIntergral,
-  getUserDefaultAddress
+  getUserDefaultAddress,
+  updateImgCover
 };

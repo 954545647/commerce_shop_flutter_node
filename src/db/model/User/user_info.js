@@ -26,6 +26,12 @@ User_Info.init(
       // unique: true,
       comment: "手机号唯一"
     },
+    imgCover: {
+      type: STRING,
+      allowNull: true,
+      defaultValue: "default_cover.jpg",
+      comment: "用户头像"
+    },
     point: {
       type: INTEGER,
       allowNull: true,

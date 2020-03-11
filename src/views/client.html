@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>模拟客户端</title>
     <style>
       * {
         margin: 0;
@@ -37,8 +37,10 @@
       }
       #messages li {
         padding: 5px 10px;
+        border-bottom: 1px solid black;
       }
-      #messages li:nth-child(odd) {
+      .right {
+        text-align: right;
         background: #eee;
       }
     </style>
@@ -52,23 +54,28 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io("http://localhost:3000");
-      let clientId;
-      socket.emit("serviceLogin");
+      socket.emit("startForService", {
+        fromId: 100,
+        username: "rex"
+      });
+      socket.on("replayFromService", data => {
+        $("#messages").append($("<li>").text(`${data.content}`));
+      });
       $(function() {
         $("form").submit(function() {
           let data = {
             content: $("#m").val(),
-            socketId: clientId,
-            user: "客服"
+            socketId: socket.id,
+            username: "rex",
+            fromId: 100,
+            toId: 1
           };
-          socket.emit("replayToClient", data);
+          $("#messages").append(
+            $("<li class='right'>").text(`${data.content}`)
+          );
+          socket.emit("chatToService", data);
           $("#m").val("");
           return false;
-        });
-        socket.on("service", function(msg) {
-          clientId = msg.socketId;
-          console.log(clientId);
-          $("#messages").append($("<li>").text(`${JSON.stringify(msg)}`));
         });
       });
     </script>

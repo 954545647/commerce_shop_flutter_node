@@ -5,7 +5,9 @@ const router = require("koa-router")();
 const {
   ChangePasswordValidator,
   AddNewAddressValidator,
-  ChangeIntegralValidator
+  ChangeIntegralValidator,
+  RegisterValidator,
+  LoginValidator
 } = require("@validators/user");
 const {
   changePass,
@@ -15,10 +17,38 @@ const {
   getUserSignDays,
   getUserTypeInfo,
   getDefaultAddress,
-  getMyFarm
+  getMyFarm,
+  register,
+  login,
+  updateCover
 } = require("@controller/user");
 const Auth = require("@middlewares/auth");
 router.prefix("/user");
+
+// 注册
+router.post("/register", async ctx => {
+  const v = await new RegisterValidator().validate(ctx);
+  const { username, password, phone } = {
+    username: v.get("body.username"),
+    password: v.get("body.password"),
+    phone: v.get("body.phone")
+  };
+  ctx.body = await register({
+    username,
+    password,
+    phone
+  });
+});
+
+// 登录
+router.post("/login", async ctx => {
+  const v = await new LoginValidator().validate(ctx);
+  const { username, password } = {
+    username: v.get("body.username"),
+    password: v.get("body.password")
+  };
+  ctx.body = await login(username, password);
+});
 
 // 修改密码
 router.post("/changePass", new Auth().token, async ctx => {
@@ -29,6 +59,13 @@ router.post("/changePass", new Auth().token, async ctx => {
     newPass: v.get("body.newPass")
   };
   ctx.body = await changePass(id, oldPass, newPass);
+});
+
+// 修改头像
+router.post("/updateCover", new Auth().token, async ctx => {
+  const { imgCover } = ctx.request.body;
+  const id = ctx.auth.id;
+  ctx.body = await updateCover(id, imgCover);
 });
 
 // 获取用户数据

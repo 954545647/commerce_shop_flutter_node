@@ -12,7 +12,8 @@ const {
   newUserAddress,
   changeUserIntegral,
   newUserIntergral,
-  getUserDefaultAddress
+  getUserDefaultAddress,
+  updateImgCover
 } = require("@services/user");
 
 const { getUserFarmsInfo } = require("@services/farm");
@@ -77,6 +78,7 @@ async function login(username, password) {
   }
   // 生成token
   let token = generateToken(userInfo.dataValues);
+
   Object.assign(userInfo.dataValues, { token });
   return new global.succ.SuccessModel({ data: userInfo.dataValues });
 }
@@ -101,6 +103,22 @@ async function changePass(id, oldPass, newPass) {
   }
   // 修改成功
   return new global.succ.SuccessModel({});
+}
+
+/**
+ * 修改头像
+ * @param {int} id
+ * @param {sting} imgCover
+ */
+async function updateCover(id, imgCover) {
+  let result = updateImgCover(id, imgCover);
+  if (result) {
+    // 修改成功
+    return new global.succ.SuccessModel({});
+  } else {
+    // 修改密码错误
+    return new global.errs.changePassFail();
+  }
 }
 
 /**
@@ -244,5 +262,6 @@ module.exports = {
   getUserSignDays,
   getUserTypeInfo,
   getDefaultAddress,
-  getMyFarm
+  getMyFarm,
+  updateCover
 };

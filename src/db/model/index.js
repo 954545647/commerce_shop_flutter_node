@@ -19,10 +19,11 @@ const Farm_Order_Detail = require("./Order/farm_order_detail");
 const Good_Supplier = require("./Good/good_supplier");
 const Good_Info = require("./Good/good_info");
 // 农场
-const Farm_Info = require("./Farm/farm_info.js");
-const Farm_Crop = require("./Farm/farm_crop.js");
-const Crop_Info = require("./Farm/crop_info.js");
-
+const Farm_Info = require("./Farm/farm_info");
+const Farm_Crop = require("./Farm/farm_crop");
+const Crop_Info = require("./Farm/crop_info");
+// 消息表
+const Chat_Info = require("./Socket/chat_info");
 // 地址表和用户信息主表
 User_Address.belongsTo(User_Info, {
   foreignKey: "userId"
@@ -120,5 +121,6 @@ module.exports = {
   Order_Cart,
   Farm_Crop,
   Farm_Info,
-  Crop_Info
+  Crop_Info,
+  Chat_Info
 };
