@@ -6,6 +6,7 @@ const path = require("path"); //路径管理
 const fs = require("fs"); //路径管理
 const { BASEURL } = require("@config");
 router.prefix("/supplier"); // 前缀
+const Auth = require("@middlewares/auth");
 
 const {
   getSuppliersInfo,
@@ -14,7 +15,8 @@ const {
   getSupplierInfoById,
   getSupplierFarm,
   getSupplierGood,
-  getSupplierOrder
+  getSupplierOrder,
+  registerExit
 } = require("@controller/supplier");
 
 // 新增供应商
@@ -43,13 +45,19 @@ router.post("/login", async ctx => {
   ctx.body = await registerLogin(username, password);
 });
 
+// 商家是否已经存在
+router.post("/ifExit", new Auth().token, async ctx => {
+  const { username } = ctx.request.body;
+  ctx.body = await registerExit(username);
+});
+
 // 获取全部商家信息
-router.get("/getAll", async ctx => {
+router.get("/getAll", new Auth().token, async ctx => {
   ctx.body = await getSuppliersInfo();
 });
 
 // 获取单个商家信息
-router.post("/getSupplierById", async ctx => {
+router.post("/getSupplierById", new Auth().token, async ctx => {
   const { goodId = null, supplierId = null } = ctx.request.body;
   ctx.body = await getSupplierInfoById(goodId, supplierId);
 });
@@ -68,19 +76,19 @@ router.post("/upload", async ctx => {
 });
 
 // 获取商家的发布的商品
-router.post("/goods", async ctx => {
+router.post("/goods", new Auth().token, async ctx => {
   const { id } = ctx.request.body; // 商家id
   ctx.body = await getSupplierGood(id);
 });
 
 // 获取商家发布的农场
-router.post("/farms", async ctx => {
+router.post("/farms", new Auth().token, async ctx => {
   const { id } = ctx.request.body;
   ctx.body = await getSupplierFarm(id);
 });
 
 // 获取商家的全部订单
-router.post("/orders", async ctx => {
+router.post("/orders", new Auth().token, async ctx => {
   const { supplierId } = ctx.request.body;
   ctx.body = await getSupplierOrder(supplierId);
 });

@@ -41,7 +41,6 @@ module.exports = appSocket = server => {
 
   // 监听与客户端的连接事件
   io.on("connection", socket => {
-    console.log(socket.id);
     // 客服上线
     socket.on("serviceLogin", () => {
       servicerId = socket.id;

@@ -12,6 +12,8 @@ const {
 
 const { getSupplierFarms } = require("@services/farm");
 const { getAllGoods } = require("@services/goods");
+const generateToken = require("@utils/token");
+
 const {
   getSupplierGoodOrders,
   getGoodOrderDetail,
@@ -88,6 +90,19 @@ async function newSupplier({
 }
 
 /**
+ * 查看商家是否存在
+ * @param {string} username
+ */
+async function registerExit(username) {
+  const supplierInfo = await getSupplierInfo(username);
+  if (supplierInfo) {
+    return new global.succ.SuccessModel({ data: supplierInfo });
+  } else {
+    return new global.errs.searchInfoFail();
+  }
+}
+
+/**
  * 商家注册
  * @param {string} username
  * @param {string} password
@@ -95,6 +110,7 @@ async function newSupplier({
 async function registerLogin(username, password) {
   // 获取用户信息
   const supplierInfo = await getSupplierInfo(username);
+  // 登录失败：用户不存在
   if (!supplierInfo) {
     return new global.errs.userNotExit();
   }
@@ -109,6 +125,10 @@ async function registerLogin(username, password) {
       return new global.errs.userPassError();
     }
   }
+
+  // 生成token
+  let token = generateToken(supplierInfo.dataValues);
+  Object.assign(supplierInfo.dataValues, { token });
   return new global.succ.SuccessModel({ data: supplierInfo.dataValues });
 }
 
@@ -193,5 +213,6 @@ module.exports = {
   registerLogin,
   getSupplierFarm,
   getSupplierGood,
-  getSupplierOrder
+  getSupplierOrder,
+  registerExit
 };
