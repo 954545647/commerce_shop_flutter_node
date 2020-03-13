@@ -10,6 +10,9 @@ const {
   getSupplierInfoBySupplierId
 } = require("@services/supplier");
 
+const { getMessage, getHistory } = require("@services/socket");
+const { getUserInfoByIds } = require("@services/user");
+
 const { getSupplierFarms } = require("@services/farm");
 const { getAllGoods } = require("@services/goods");
 const generateToken = require("@utils/token");
@@ -66,13 +69,9 @@ async function newSupplier({
   phone,
   idNum,
   frontImg,
-  backImg
+  backImg,
+  imgCover
 }) {
-  const supplierInfo = await getSupplierInfo(username);
-  if (supplierInfo) {
-    // 用户名已存在
-    return new global.errs.registerUserExist();
-  }
   try {
     let supplierInfo = await newSupplierInfo({
       username,
@@ -80,7 +79,8 @@ async function newSupplier({
       phone,
       idNum,
       frontImg,
-      backImg
+      backImg,
+      imgCover
     });
     return new global.succ.SuccessModel({ data: supplierInfo });
   } catch (error) {
@@ -103,7 +103,7 @@ async function registerExit(username) {
 }
 
 /**
- * 商家注册
+ * 商家登录
  * @param {string} username
  * @param {string} password
  */
@@ -206,6 +206,40 @@ async function getSupplierOrder(id) {
   }
 }
 
+/**
+ * 获取商家收到的消息
+ * @param {int} id
+ */
+async function getSupplierMessage(id) {
+  let result = {};
+  let clientIds = new Set(); // 买家id集合
+  let messageInfo = await getMessage(id);
+  if (messageInfo) {
+    for (let i = 0; i < messageInfo.length; i++) {
+      let curItem = messageInfo[i].dataValues;
+      // 记录消息的发送方
+      result[curItem.fromId] = {};
+      clientIds.add(curItem.fromId);
+    }
+  }
+  // 根据发送方的id去获取发送方的信息
+  let userInfo = await getUserInfoByIds([...clientIds]);
+  if (userInfo) {
+    for (let i = 0; i < userInfo.length; i++) {
+      let curItem = userInfo[i].dataValues;
+      // 根据发送方的id去获取聊天记录
+      let historyInfo = await getHistory(curItem.id, id);
+      result[curItem.id].userInfo = curItem;
+      result[curItem.id].historyInfo = historyInfo;
+    }
+  }
+  if (messageInfo && userInfo) {
+    return new global.succ.SuccessModel({ data: result });
+  } else {
+    return new global.errs.searchInfoFail();
+  }
+}
+
 module.exports = {
   getSuppliersInfo,
   newSupplier,
@@ -214,5 +248,6 @@ module.exports = {
   getSupplierFarm,
   getSupplierGood,
   getSupplierOrder,
-  registerExit
+  registerExit,
+  getSupplierMessage
 };

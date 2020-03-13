@@ -28,7 +28,6 @@ class Auth {
       }
       // 这里可以进一步对用户的权限进行校验
       ctx.auth = decode;
-      console.log(ctx.auth);
       await next();
     };
   }

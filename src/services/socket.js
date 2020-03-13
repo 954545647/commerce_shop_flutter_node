@@ -8,13 +8,23 @@ const Op = require("Sequelize").Op;
  * 保存客服聊天内容
  * @param {int} param0
  */
-async function saveInfo({ username, fromId, toId, content, status }) {
+async function saveInfo({
+  fromName,
+  toName,
+  fromId,
+  toId,
+  content,
+  status,
+  type
+}) {
   let result = await Chat_Info.create({
-    username,
+    fromName,
+    toName,
     fromId,
     toId,
     content,
-    status
+    status,
+    type
   });
   return result;
 }
@@ -28,6 +38,29 @@ async function getMessage(id) {
     where: {
       toId: id
     }
+  });
+  return result;
+}
+
+/**
+ * 获取顾客和客服的聊天记录
+ * @param {int} id
+ */
+async function getHistory(fromId, toId) {
+  let result = await Chat_Info.findAll({
+    where: {
+      [Op.or]: [
+        {
+          toId: fromId,
+          fromId: toId
+        },
+        {
+          fromId: fromId,
+          toId: toId
+        }
+      ]
+    },
+    order: [["createdAt", "DESC"]]
   });
   return result;
 }
@@ -59,5 +92,6 @@ async function getSerivceHistory(id) {
 module.exports = {
   saveInfo,
   getMessage,
-  getSerivceHistory
+  getSerivceHistory,
+  getHistory
 };

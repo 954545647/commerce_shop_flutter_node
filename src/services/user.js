@@ -32,7 +32,21 @@ async function getUserInfo(username, password) {
  */
 async function getUserInfoById(id) {
   const result = await User_Info.findOne({
-    attributes: ["id", "username", "phone", "point", "createdAt"],
+    attributes: ["id", "username", "phone", "imgCover", "point", "createdAt"],
+    where: {
+      id
+    }
+  });
+  return result;
+}
+
+/**
+ * 根据id查找用户数据
+ * @param {int} id
+ */
+async function getUserInfoByIds(id) {
+  const result = await User_Info.findAll({
+    attributes: ["id", "username", "phone", "imgCover", "point", "createdAt"],
     where: {
       id
     }
@@ -207,6 +221,7 @@ module.exports = {
   createUser,
   getUserInfo,
   getUserInfoById,
+  getUserInfoByIds,
   modifyUser,
   getUserAddress,
   newUserAddress,

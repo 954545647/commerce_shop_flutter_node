@@ -16,7 +16,8 @@ const {
   getSupplierFarm,
   getSupplierGood,
   getSupplierOrder,
-  registerExit
+  registerExit,
+  getSupplierMessage
 } = require("@controller/supplier");
 
 // 新增供应商
@@ -27,7 +28,8 @@ router.post("/register", async ctx => {
     phone,
     idNum,
     frontImg,
-    backImg
+    backImg,
+    imgCover
   } = ctx.request.body;
   ctx.body = await newSupplier({
     username,
@@ -35,7 +37,8 @@ router.post("/register", async ctx => {
     phone,
     idNum,
     frontImg,
-    backImg
+    backImg,
+    imgCover
   });
 });
 
@@ -46,7 +49,7 @@ router.post("/login", async ctx => {
 });
 
 // 商家是否已经存在
-router.post("/ifExit", new Auth().token, async ctx => {
+router.post("/ifExit", async ctx => {
   const { username } = ctx.request.body;
   ctx.body = await registerExit(username);
 });
@@ -57,7 +60,7 @@ router.get("/getAll", new Auth().token, async ctx => {
 });
 
 // 获取单个商家信息
-router.post("/getSupplierById", new Auth().token, async ctx => {
+router.post("/getSupplierById", async ctx => {
   const { goodId = null, supplierId = null } = ctx.request.body;
   ctx.body = await getSupplierInfoById(goodId, supplierId);
 });
@@ -91,6 +94,13 @@ router.post("/farms", new Auth().token, async ctx => {
 router.post("/orders", new Auth().token, async ctx => {
   const { supplierId } = ctx.request.body;
   ctx.body = await getSupplierOrder(supplierId);
+});
+
+// 获取商家的全部消息
+router.post("/message", new Auth().token, async ctx => {
+  const supplierId = ctx.auth.id;
+  console.log("商家", supplierId);
+  ctx.body = await getSupplierMessage(supplierId);
 });
 
 module.exports = router;

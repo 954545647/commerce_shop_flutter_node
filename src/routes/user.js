@@ -20,7 +20,8 @@ const {
   getMyFarm,
   register,
   login,
-  updateCover
+  updateCover,
+  isExist
 } = require("@controller/user");
 const Auth = require("@middlewares/auth");
 router.prefix("/user");
@@ -59,6 +60,12 @@ router.post("/changePass", new Auth().token, async ctx => {
     newPass: v.get("body.newPass")
   };
   ctx.body = await changePass(id, oldPass, newPass);
+});
+
+// 用户名是否已经存在
+router.post("/ifExit", async ctx => {
+  const { username } = ctx.request.body;
+  ctx.body = await isExist(username);
 });
 
 // 修改头像

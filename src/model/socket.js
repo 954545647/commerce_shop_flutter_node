@@ -3,11 +3,20 @@
  */
 
 class MessageInfo {
-  constructor({ fromId, toId = null, content, username = null }) {
+  constructor({
+    fromId = null,
+    toId = null,
+    content = null,
+    fromName = null,
+    toName = null,
+    type = 0 // 是顾客or商家、客服
+  }) {
     this.fromId = fromId;
     this.toId = toId;
     this.content = content;
-    this.username = username;
+    this.fromName = fromName;
+    this.toName = toName;
+    this.type = type;
   }
 }
 

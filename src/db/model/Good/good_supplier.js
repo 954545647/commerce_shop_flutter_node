@@ -36,6 +36,11 @@ Good_Supplier.init(
       allowNull: false,
       comment: "身份证号码"
     },
+    imgCover: {
+      type: STRING,
+      allowNull: false,
+      comment: "店铺头像"
+    },
     frontImg: {
       type: STRING,
       allowNull: false,

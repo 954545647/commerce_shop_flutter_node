@@ -74,17 +74,20 @@ async function newSupplierInfo({
   phone,
   idNum,
   frontImg,
-  backImg
+  backImg,
+  imgCover
 }) {
   frontImg = cutPath(frontImg);
   backImg = cutPath(backImg);
+  imgCover = cutPath(imgCover);
   const result = await Good_Supplier.create({
     username,
     password,
     phone,
     idNum,
     frontImg,
-    backImg
+    backImg,
+    imgCover
   });
   return result;
 }

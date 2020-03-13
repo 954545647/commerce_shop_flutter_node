@@ -57,29 +57,35 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io("http://localhost:3000");
+      let clientId;
       let chooseId;
-      let chooseName;
-      socket.emit("serviceLogin");
+      socket.emit("supplierLogin", {
+        id: 1,
+        username: "汉堡王店铺",
+        type: 1
+      });
       $(function() {
         $("form").submit(function() {
           let data = {
             content: $("#m").val(),
-            fromName: "系统",
+            fromId: 1,
+            fromName: "汉堡王店铺",
             toId: chooseId,
-            fromId: 0,
-            type: 1,
-            toName: chooseName
+            toName: "123"
           };
           $("#messages").append(
             $("<li class='right'>").text(`${data.content}`)
           );
-          socket.emit("replayToClient", data);
+          socket.emit("SreplayToClient", data);
           $("#m").val("");
           return false;
         });
-        socket.on("service", function(msg) {
+        // 监听服务端将顾客信息转发数据
+        socket.on("supplier", function(msg) {
           $("#messages").append(
-            $("<li>").text(`${msg.content},${msg.fromName},${msg.fromId}`)
+            $("<li>").text(
+              `${msg.content},${msg.toName},${msg.fromName},${msg.fromId}`
+            )
           );
         });
       });
@@ -91,8 +97,8 @@
         target.classList.add("click");
         if (target.nodeName.toLocaleLowerCase() == "li") {
           let str = target.innerHTML.split(",");
-          chooseName = str[1];
-          chooseId = str[2];
+          clientId = str[1];
+          chooseId = str[3];
         }
       });
 

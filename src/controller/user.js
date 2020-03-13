@@ -41,12 +41,11 @@ async function isExist(username) {
  * @param {string} phone 手机号
  */
 async function register({ username, password, phone }) {
-  const userInfo = await getUserInfo(username);
-  if (userInfo) {
-    // 用户名已存在
-    return new global.errs.registerUserExist();
-  }
-
+  // const userInfo = await getUserInfo(username);
+  // if (userInfo) {
+  //   // 用户名已存在
+  //   return new global.errs.registerUserExist();
+  // }
   try {
     await createUser({ username, password: doCrypto(password), phone });
     return new global.succ.SuccessModel({});

@@ -10,10 +10,17 @@ class Chat_Info extends Model {}
 // 聊天消息表
 Chat_Info.init(
   {
-    username: {
+    fromName: {
       type: STRING,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: "系统",
       comment: "发消息人名"
+    },
+    toName: {
+      type: STRING,
+      allowNull: true,
+      defaultValue: "系统",
+      comment: "收消息人名"
     },
     fromId: {
       type: INTEGER,
@@ -34,6 +41,11 @@ Chat_Info.init(
       type: INTEGER,
       defaultValue: 0,
       comment: "是否已读，0未读，1已读"
+    },
+    type: {
+      type: INTEGER,
+      defaultValue: 0,
+      comment: "发送方，0顾客，1：商家、客服"
     }
   },
   {
