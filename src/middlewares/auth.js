@@ -12,10 +12,11 @@ class Auth {
       // 获取token
       let decode;
       const { authorization = "" } = ctx.request.headers;
+      let path = ctx.request.url;
       const token = authorization.replace("Bearer ", "");
       let errMsg = "token不合法";
       if (!token) {
-        throw new global.errs.Forbidden(errMsg);
+        throw new global.errs.Forbidden(errMsg, path);
       }
       try {
         decode = jwt.verify(token, TOKEN_KEY);
@@ -24,7 +25,7 @@ class Auth {
         if (error.name == "TokenExpiredError") {
           errMsg = "token令牌已过期";
         }
-        throw new global.errs.Forbidden(errMsg);
+        throw new global.errs.Forbidden(errMsg, path);
       }
       // 这里可以进一步对用户的权限进行校验
       ctx.auth = decode;

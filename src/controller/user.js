@@ -28,9 +28,11 @@ const generateToken = require("@utils/token");
 async function isExist(username) {
   const userInfo = await getUserInfo(username);
   if (userInfo) {
-    return new global.succ.SuccessModel({ data: userInfo });
-  } else {
+    // 如果存在
     return new global.errs.registerUserExist();
+  } else {
+    // 不存在
+    return new global.succ.SuccessModel({ data: false });
   }
 }
 

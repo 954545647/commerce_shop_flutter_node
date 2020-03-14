@@ -7,7 +7,7 @@ const fs = require("fs"); //路径管理
 const { BASEURL } = require("@config");
 router.prefix("/supplier"); // 前缀
 const Auth = require("@middlewares/auth");
-
+const { UserNameValidator } = require("@validators/user");
 const {
   getSuppliersInfo,
   newSupplier,
@@ -50,6 +50,7 @@ router.post("/login", async ctx => {
 
 // 商家是否已经存在
 router.post("/ifExit", async ctx => {
+  await new UserNameValidator().validate(ctx);
   const { username } = ctx.request.body;
   ctx.body = await registerExit(username);
 });
@@ -99,7 +100,6 @@ router.post("/orders", new Auth().token, async ctx => {
 // 获取商家的全部消息
 router.post("/message", new Auth().token, async ctx => {
   const supplierId = ctx.auth.id;
-  console.log("商家", supplierId);
   ctx.body = await getSupplierMessage(supplierId);
 });
 

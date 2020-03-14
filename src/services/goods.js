@@ -18,6 +18,7 @@ async function getAllGoods(id) {
     include: [
       {
         model: Good_Supplier
+        // attributes: ["username", "phone"]
       }
     ]
   });
@@ -91,8 +92,8 @@ async function updateGoodInfo(goodId, stock, sales) {
  * 修改商品状态
  * @param {int} goodId
  */
-async function updateGoodState(goodId, status) {
-  const result = await Farm_Info.update(
+async function updateGoodStatus(goodId, status) {
+  const result = await Good_Info.update(
     {
       status
     },
@@ -110,5 +111,5 @@ module.exports = {
   getAllGoods,
   updateGoodInfo,
   getGoodInfoById,
-  updateGoodState
+  updateGoodStatus
 };

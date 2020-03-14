@@ -96,9 +96,9 @@ async function newSupplier({
 async function registerExit(username) {
   const supplierInfo = await getSupplierInfo(username);
   if (supplierInfo) {
-    return new global.succ.SuccessModel({ data: supplierInfo });
+    return new global.errs.registerUserExist();
   } else {
-    return new global.errs.searchInfoFail();
+    return new global.succ.SuccessModel({ data: supplierInfo });
   }
 }
 

@@ -7,7 +7,8 @@ const {
   newGood,
   getAlls,
   updateInfo,
-  getGoodDetail
+  getGoodDetail,
+  updateStatus
 } = require("@controller/goods");
 // const { NewGoodValidator } = require("@validators/good");
 router.prefix("/goods"); // 前缀
@@ -51,23 +52,17 @@ router.post("/update", new Auth().token, async ctx => {
   ctx.body = await updateInfo(goodInfo);
 });
 
+// 更新状态
+router.post("/updateStatus", new Auth().token, async ctx => {
+  const { goodId, status } = ctx.request.body;
+  console.log(goodId, status);
+  ctx.body = await updateStatus(goodId, status);
+});
+
 // 获取商品详细信息
 router.post("/getInfo", async ctx => {
   const { goodId } = ctx.request.body;
   ctx.body = await getGoodDetail(goodId);
-});
-
-router.post("/saveId", async ctx => {
-  const { goodId } = ctx.request.body;
-  global.errs.goodId = goodId;
-  ctx.body = {
-    msg: "save ok"
-  };
-});
-
-router.get("/getId", async ctx => {
-  let id = global.errs.goodId || 0;
-  ctx.body = id;
 });
 
 module.exports = router;

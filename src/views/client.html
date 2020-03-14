@@ -66,9 +66,10 @@
           let data = {
             content: $("#m").val(),
             socketId: socket.id,
-            username: "rex",
+            fromName: "rex",
             fromId: 100,
-            toId: 1
+            toName: "系统",
+            toId: 0
           };
           $("#messages").append(
             $("<li class='right'>").text(`${data.content}`)

@@ -5,7 +5,12 @@
 const router = require("koa-router")();
 const Auth = require("@middlewares/auth");
 router.prefix("/order");
-const { newOrder, getAllOrders, modifyStatus } = require("@controller/order");
+const {
+  newOrder,
+  getAllOrders,
+  modifyStatus,
+  getUnpayOrders
+} = require("@controller/order");
 const { doAction } = require("@utils/queue");
 
 // 开启延时任务
@@ -17,6 +22,11 @@ router.post("/startTask", new Auth().token, async ctx => {
   ctx.body = {
     msg: "成功"
   };
+});
+
+// 未支付订单
+router.get("/unpay", new Auth().token, async ctx => {
+  ctx.body = await getUnpayOrders();
 });
 
 // 生成订单

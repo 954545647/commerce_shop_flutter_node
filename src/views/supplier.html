@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>模拟客服中心</title>
+    <title>模拟商家中心</title>
     <style>
       * {
         margin: 0;
@@ -59,9 +59,13 @@
       var socket = io("http://localhost:3000");
       let clientId;
       let chooseId;
+      // 告诉顾客商家开始客服服务了
+      // 我是商家id1号
       socket.emit("supplierLogin", {
-        id: 1,
-        username: "汉堡王店铺",
+        fromId: 1,
+        fromName: "1234",
+        toId: 2,
+        toName: "1237",
         type: 1
       });
       $(function() {
@@ -82,6 +86,7 @@
         });
         // 监听服务端将顾客信息转发数据
         socket.on("supplier", function(msg) {
+          console.log(msg);
           $("#messages").append(
             $("<li>").text(
               `${msg.content},${msg.toName},${msg.fromName},${msg.fromId}`

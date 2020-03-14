@@ -19,7 +19,7 @@ async function getAllSuppliers() {
  */
 async function getSupplierInfo(username) {
   const result = await Good_Supplier.findOne({
-    attributes: ["id", "username", "phone"],
+    attributes: ["id", "username", "phone", "imgCover"],
     where: {
       username
     }

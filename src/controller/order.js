@@ -6,7 +6,8 @@ const {
   createOrderInfo,
   createOrderDetail,
   getUserOrders,
-  modifyOrderStatus
+  modifyOrderStatus,
+  getGoodOrderDetail
 } = require("@services/order");
 
 const { getUserCarts } = require("@services/cart");
@@ -93,8 +94,23 @@ async function modifyStatus(orderId) {
   }
 }
 
+// 获取未支付订单
+async function getUnpayOrders() {
+  let result = [];
+  for (let key of global.orderMap.keys()) {
+    let data = await getGoodOrderDetail(key);
+    result.push(...data);
+  }
+  if (result) {
+    return new global.succ.SuccessModel({ data: result });
+  } else {
+    return new global.errs.updateInfoFail();
+  }
+}
+
 module.exports = {
   newOrder,
   getAllOrders,
-  modifyStatus
+  modifyStatus,
+  getUnpayOrders
 };

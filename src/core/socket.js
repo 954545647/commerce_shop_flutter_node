@@ -33,17 +33,17 @@ module.exports = appSocket = server => {
     // 商家上线
     socket.on("supplierLogin", msg => {
       // 记录商家信息
-      suppliers[msg.id] = {
+      suppliers[msg.fromId] = {
         socketId: socket.id,
-        username: msg.username
+        username: msg.fromName
       };
       printDetail(servicerId, clientsForService, suppliers, clientsForSupplier);
       for (let client in clientsForSupplier) {
         io.to(clientsForSupplier[client]).emit(
           "replayFromSupplier",
           new MessageInfo({
-            content: `你好,我是商家${msg.username}`,
-            fromName: "商家",
+            content: `你好,我是商家${msg.fromName}`,
+            fromName: msg.fromName,
             type: 1
           })
         );
@@ -157,6 +157,16 @@ module.exports = appSocket = server => {
         .emit("replayFromSupplier", message);
     });
 
+    // 商家下线，不再回复顾客
+    socket.on("SnosreplayToClient", async msg => {
+      delete suppliers[msg.id];
+    });
+
+    // 顾客离开，不再和商家聊天
+    socket.on("nochatToSupplier", async msg => {
+      delete clientsForSupplier[msg.id];
+    });
+
     // 登出
     socket.on("disconnect", () => {
       // 判断是否是客服下线
@@ -182,12 +192,12 @@ function printDetail(
   suppliers,
   clientsForSupplier
 ) {
-  console.log("\n\n");
+  console.log("\n");
   console.log(`当前在线客服${servicerId}`);
   console.log(`当前在线咨询客服顾客${JSON.stringify(clientsForService)}`);
   console.log(`当前在线商家${JSON.stringify(suppliers)}`);
   console.log(`当前在线咨询商家顾客${JSON.stringify(clientsForSupplier)}`);
-  console.log("\n\n");
+  console.log("\n");
 }
 
 // 发送客服未在线消息

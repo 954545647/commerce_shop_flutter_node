@@ -7,7 +7,8 @@ const {
   AddNewAddressValidator,
   ChangeIntegralValidator,
   RegisterValidator,
-  LoginValidator
+  LoginValidator,
+  UserNameValidator
 } = require("@validators/user");
 const {
   changePass,
@@ -64,6 +65,7 @@ router.post("/changePass", new Auth().token, async ctx => {
 
 // 用户名是否已经存在
 router.post("/ifExit", async ctx => {
+  await new UserNameValidator().validate(ctx);
   const { username } = ctx.request.body;
   ctx.body = await isExist(username);
 });

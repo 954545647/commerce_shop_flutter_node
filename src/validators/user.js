@@ -55,6 +55,19 @@ class LoginValidator extends Validator {
   }
 }
 
+// 用户名是否存在
+class UserNameValidator extends Validator {
+  constructor() {
+    super();
+    this.username = [
+      new Rule("isLength", "昵称长度必须在3-20之间", {
+        min: 3,
+        max: 20
+      })
+    ];
+  }
+}
+
 // 修改密码参数校验
 class ChangePasswordValidator extends Validator {
   constructor() {
@@ -122,5 +135,6 @@ module.exports = {
   RegisterValidator,
   ChangePasswordValidator,
   AddNewAddressValidator,
+  UserNameValidator,
   ChangeIntegralValidator
 };

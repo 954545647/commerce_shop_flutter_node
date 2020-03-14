@@ -61,10 +61,10 @@ const changeIntegral = function(old, source) {
  */
 const cutPath = function(str) {
   str = str.toString();
-  if (str.indexOf("127") != -1) {
+  if (str.indexOf("127.0.0") != -1) {
     str = str.slice(15);
   }
-  if (str.indexOf("47") != -1) {
+  if (str.indexOf("47.96.96") != -1) {
     str = str.slice(15);
   }
   return str;

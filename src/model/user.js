@@ -56,9 +56,10 @@ class oldPassWrong extends HttpException {
 
 // 登录失败
 class Forbidden extends HttpException {
-  constructor(msg, errorCode) {
+  constructor(msg, path, errorCode) {
     super();
     this.code = 400;
+    this.path = path;
     this.msg = msg || "登录失败";
     this.errorCode = errorCode || 11006;
   }

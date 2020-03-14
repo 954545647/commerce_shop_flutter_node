@@ -47,6 +47,7 @@ async function getMessage(id) {
  * @param {int} id
  */
 async function getHistory(fromId, toId) {
+  console.log("获取聊天记录", fromId, toId);
   let result = await Chat_Info.findAll({
     where: {
       [Op.or]: [

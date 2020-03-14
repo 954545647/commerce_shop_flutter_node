@@ -6,7 +6,8 @@ const {
   newGoodInfo,
   getAllGoods,
   getGoodInfoById,
-  updateGoodInfo
+  updateGoodInfo,
+  updateGoodStatus
 } = require("@services/goods");
 
 /**
@@ -25,9 +26,13 @@ async function getAlls(id) {
       ) {
         // 将合并查找的 Good_Supplier 信息提取出来
         let supplierInfo = data.dataValues.Good_Supplier.dataValues;
-        // 把商品数据的id名字更改为 goodId，这样不会发生重叠
+        // 把商家的id名字更改为 supplierId，这样不会发生重叠
         supplierInfo = JSON.parse(
-          JSON.stringify(supplierInfo).replace(/id/g, "goodId")
+          JSON.stringify(supplierInfo).replace(/id/g, "supplierId")
+        );
+        // 把商家店铺的封面更改为 simgCover，这样不会发生重叠
+        supplierInfo = JSON.parse(
+          JSON.stringify(supplierInfo).replace(/imgCover/g, "simgCover")
         );
         Object.assign(data.dataValues, supplierInfo);
         delete data.dataValues.Good_Supplier;
@@ -108,9 +113,23 @@ async function updateInfo(goodInfo) {
   return new global.succ.SuccessModel({ msg: "更新成功" });
 }
 
+/**
+ * 更新商品状态
+ * @param {int} goodId
+ */
+async function updateStatus(goodId, status) {
+  let result = await updateGoodStatus(goodId, status);
+  if (result) {
+    return new global.succ.SuccessModel({ msg: "更新成功" });
+  } else {
+    return new global.errs.updateInfoFail();
+  }
+}
+
 module.exports = {
   getAlls,
   newGood,
   updateInfo,
+  updateStatus,
   getGoodDetail
 };
