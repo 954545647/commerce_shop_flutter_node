@@ -54,17 +54,6 @@ class oldPassWrong extends HttpException {
   }
 }
 
-// 登录失败
-class Forbidden extends HttpException {
-  constructor(msg, path, errorCode) {
-    super();
-    this.code = 400;
-    this.path = path;
-    this.msg = msg || "登录失败";
-    this.errorCode = errorCode || 11006;
-  }
-}
-
 // 新增地址失败
 class newAddressFail extends HttpException {
   constructor(msg, errorCode) {
@@ -112,7 +101,6 @@ module.exports = {
   userPassError,
   changePassFail,
   oldPassWrong,
-  Forbidden,
   newAddressFail,
   changeIntegralFail,
   searchSignInfoFail

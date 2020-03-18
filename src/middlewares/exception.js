@@ -11,7 +11,7 @@ const catchError = async (ctx, next) => {
     await next();
   } catch (error) {
     const isHttpException = error instanceof HttpException;
-    console.error(error);
+    // console.error(error);
     // 开发环境下直接抛出
     if (isDev && !isHttpException) {
       throw error;
@@ -22,7 +22,8 @@ const catchError = async (ctx, next) => {
         msg: error.msg,
         errorCode: error.errorCode,
         code: error.code,
-        request: `${ctx.method} ${ctx.path}`
+        method: ctx.method,
+        path: ctx.path
       };
       ctx.status = error.code;
       // 未知异常

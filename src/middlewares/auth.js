@@ -4,6 +4,9 @@
 
 const jwt = require("jsonwebtoken");
 const { TOKEN_KEY } = require("@config/keys");
+// const generateToken = require("@utils/token");
+// const { ACCESS_TOKEN_EXPIRE, REFRESH_TOKEN_EXPIRE } = require("@config/keys");
+
 class Auth {
   constructor() {}
 
@@ -15,8 +18,9 @@ class Auth {
       let path = ctx.request.url;
       const token = authorization.replace("Bearer ", "");
       let errMsg = "token不合法";
+      // 没有携带token
       if (!token) {
-        throw new global.errs.Forbidden(errMsg, path);
+        throw new global.errs.TokenNotFound(errMsg, path);
       }
       try {
         decode = jwt.verify(token, TOKEN_KEY);
@@ -25,7 +29,13 @@ class Auth {
         if (error.name == "TokenExpiredError") {
           errMsg = "token令牌已过期";
         }
-        throw new global.errs.Forbidden(errMsg, path);
+        // 如果是刷新token路由携带的token过期，则代表refreshToken也过期了
+        if (path == "/utils/getRefreshToken") {
+          console.log("refreshToken过期了");
+          throw new global.errs.RefreshTokenFail(errMsg, path);
+        }
+        console.log("accessToken过期了");
+        throw new global.errs.AccessTokenFail(errMsg, path);
       }
       // 这里可以进一步对用户的权限进行校验
       ctx.auth = decode;

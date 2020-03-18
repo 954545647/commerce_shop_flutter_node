@@ -43,8 +43,12 @@ if (isProd) {
   };
 }
 
+// 设置的key的前缀
+const REDIS_PRE = "flutter:shop";
+
 module.exports = {
   MYSQL_CONF,
   REDIS_CONF,
-  MYSQL_CONNECT
+  MYSQL_CONNECT,
+  REDIS_PRE
 };

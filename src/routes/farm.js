@@ -20,6 +20,7 @@ router.post("/getInfo", async ctx => {
 
 // 获取土地列表
 router.get("/getAlls", async ctx => {
+  console.log("xxx");
   ctx.body = await getAllFarms();
 });
 

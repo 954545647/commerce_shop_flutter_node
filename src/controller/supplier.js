@@ -127,8 +127,8 @@ async function registerLogin(username, password) {
   }
 
   // 生成token
-  let token = generateToken(supplierInfo.dataValues);
-  Object.assign(supplierInfo.dataValues, { token });
+  let accessToken = generateToken(supplierInfo.dataValues);
+  Object.assign(supplierInfo.dataValues, { accessToken });
   return new global.succ.SuccessModel({ data: supplierInfo.dataValues });
 }
 

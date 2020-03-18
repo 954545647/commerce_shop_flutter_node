@@ -5,6 +5,7 @@
 const { User_Info, User_Address, User_Integral } = require("@db/model");
 const { changeIntegral } = require("@utils/util");
 const { cutPath } = require("@utils/util");
+const Op = require("Sequelize").Op;
 /**
  * 查询数据中用户信息
  * @param {string} username
@@ -177,6 +178,39 @@ async function newUserAddress({
     address,
     isDefault
   });
+  // 如果是默认地址
+  if (isDefault) {
+    let id = res.dataValues.id;
+    // 先将其他全部地址变为非默认
+    await User_Address.update(
+      {
+        isDefault: 0
+      },
+      {
+        where: {
+          [Op.or]: [
+            {
+              isDefault: 0
+            },
+            {
+              isDefault: 1
+            }
+          ]
+        }
+      }
+    );
+    // 设置当前新增的地址为默认
+    await User_Address.update(
+      {
+        isDefault: 1
+      },
+      {
+        where: {
+          id: id
+        }
+      }
+    );
+  }
   return res.dataValues;
 }
 

@@ -2,6 +2,7 @@
  * @description Redis Store
  */
 const Redis = require("ioredis");
+
 class RedisStore {
   constructor(redisConfig) {
     this.redis = new Redis(redisConfig);

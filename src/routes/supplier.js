@@ -66,19 +66,6 @@ router.post("/getSupplierById", async ctx => {
   ctx.body = await getSupplierInfoById(goodId, supplierId);
 });
 
-// 文件上传
-router.post("/upload", async ctx => {
-  const file = ctx.request.files.file;
-  // 接收到文件之后，我们需要把文件保存到目录中，返回一个 url 给前端
-  const basename = path.basename(file.path);
-  const reader = fs.createReadStream(file.path); // 创建可读流
-  const ext = file.name.split(".").pop(); // 获取上传文件扩展名
-  const staticPath = path.join(__dirname, "../static");
-  const upStream = fs.createWriteStream(`${staticPath}/${basename}.${ext}`); // 创建可写流
-  reader.pipe(upStream); // 可读流通过管道写入可写流
-  ctx.body = { url: `${BASEURL}/${basename}.${ext}` };
-});
-
 // 获取商家的发布的商品
 router.post("/goods", new Auth().token, async ctx => {
   const { id } = ctx.request.body; // 商家id

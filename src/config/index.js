@@ -2,7 +2,12 @@ const { MYSQL_CONNECT, MYSQL_CONF, REDIS_CONF } = require("./db");
 const ERROR_OPTIONS = require("./error");
 const { SESSION_CONF, SESSION_KEYS } = require("./session");
 const { STRING, DECIMAL, TEXT, INTEGER, BOOLEAN } = require("./types");
-const { SECRET_KEY, TOKEN_KEY, TOKEN_EXPIRE } = require("./keys");
+const {
+  SECRET_KEY,
+  TOKEN_KEY,
+  ACCESS_TOKEN_EXPIRE,
+  REFRESH_TOKEN_EXPIRE
+} = require("./keys");
 const { BASEURL } = require("./env");
 module.exports = {
   MYSQL_CONF,
@@ -18,6 +23,7 @@ module.exports = {
   BOOLEAN,
   SECRET_KEY,
   TOKEN_KEY,
-  TOKEN_EXPIRE,
+  ACCESS_TOKEN_EXPIRE,
+  REFRESH_TOKEN_EXPIRE,
   BASEURL
 };

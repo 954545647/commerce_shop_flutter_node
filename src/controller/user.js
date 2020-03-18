@@ -21,6 +21,7 @@ const { getUserFarmsInfo } = require("@services/farm");
 const doCrypto = require("@utils/cryp.js");
 
 const generateToken = require("@utils/token");
+const { REFRESH_TOKEN_EXPIRE } = require("@config/keys");
 /**
  * 查看用户名是否存在
  * @param {string} username
@@ -43,11 +44,6 @@ async function isExist(username) {
  * @param {string} phone 手机号
  */
 async function register({ username, password, phone }) {
-  // const userInfo = await getUserInfo(username);
-  // if (userInfo) {
-  //   // 用户名已存在
-  //   return new global.errs.registerUserExist();
-  // }
   try {
     await createUser({ username, password: doCrypto(password), phone });
     return new global.succ.SuccessModel({});
@@ -78,9 +74,10 @@ async function login(username, password) {
     }
   }
   // 生成token
-  let token = generateToken(userInfo.dataValues);
+  let accessToken = generateToken(userInfo.dataValues);
+  let refreshToken = generateToken(userInfo.dataValues, REFRESH_TOKEN_EXPIRE);
 
-  Object.assign(userInfo.dataValues, { token });
+  Object.assign(userInfo.dataValues, { accessToken, refreshToken });
   return new global.succ.SuccessModel({ data: userInfo.dataValues });
 }
 
@@ -252,6 +249,21 @@ async function getMyFarm(userId) {
   }
 }
 
+/**
+ * 刷新token
+ * @param {int} id 用户id
+ */
+async function refreshToken(id) {
+  // 获取用户信息
+  const userInfo = await getUserInfoById(id);
+  // 生成token
+  let accessToken = generateToken(userInfo.dataValues);
+  let refreshToken = generateToken(userInfo.dataValues, REFRESH_TOKEN_EXPIRE);
+
+  Object.assign(userInfo.dataValues, { accessToken, refreshToken });
+  return new global.succ.SuccessModel({ data: userInfo.dataValues });
+}
+
 module.exports = {
   isExist,
   register,
@@ -264,5 +276,6 @@ module.exports = {
   getUserTypeInfo,
   getDefaultAddress,
   getMyFarm,
-  updateCover
+  updateCover,
+  refreshToken
 };

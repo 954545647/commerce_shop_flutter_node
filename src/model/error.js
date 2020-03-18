@@ -62,11 +62,47 @@ class deleteInfoFail extends HttpException {
   }
 }
 
+// 没有携带token
+class TokenNotFound extends HttpException {
+  constructor(msg, path, errorCode) {
+    super();
+    this.code = 400;
+    this.path = path;
+    this.msg = msg || "token没有携带";
+    this.errorCode = errorCode || 10005;
+  }
+}
+
+// 登录失败，accessToken过期
+class AccessTokenFail extends HttpException {
+  constructor(msg, path, errorCode) {
+    super();
+    this.code = 400;
+    this.path = path;
+    this.msg = msg || "accessToken过期";
+    this.errorCode = errorCode || 10006;
+  }
+}
+
+// 登录失败，refreshToken过期
+class RefreshTokenFail extends HttpException {
+  constructor(msg, path, errorCode) {
+    super();
+    this.code = 400;
+    this.path = path;
+    this.msg = msg || "refreshToken过期";
+    this.errorCode = errorCode || 10007;
+  }
+}
+
 module.exports = {
   HttpException,
   ParameterException,
   searchInfoFail,
   createInfoFail,
   updateInfoFail,
-  deleteInfoFail
+  deleteInfoFail,
+  TokenNotFound,
+  AccessTokenFail,
+  RefreshTokenFail
 };
