@@ -6,7 +6,7 @@ const {
   Crop_Info,
   Farm_Info,
   Farm_Crop,
-  Good_Supplier,
+  Supplier_Info,
   Farm_Order,
   Farm_Order_Detail
 } = require("@db/model");
@@ -15,10 +15,16 @@ const { cutPath } = require("@utils/util");
 /**
  * 获取全部农场信息
  */
-async function getAllFarmsInfo() {
+async function getAllFarmsInfo(limit) {
+  let whereOpt = {};
+  if (limit) {
+    whereOpt = limit;
+  }
   const farmInfo = await Farm_Info.findAll({
+    where: whereOpt,
     include: {
-      model: Good_Supplier
+      model: Supplier_Info,
+      attributes: ["id", "username", "phone", "imgCover"]
     }
   });
   let result = [];
@@ -42,6 +48,32 @@ async function getAllFarmsInfo() {
 }
 
 /**
+ * 获取上线农场
+ */
+async function getOnlineFarm() {
+  const result = await getAllFarmsInfo({
+    status: 1
+  });
+  return result;
+}
+
+/**
+ * 获取热门租地
+ */
+async function getHotFarms() {
+  const farmInfo = await getAllFarmsInfo({
+    status: 1
+  });
+  if (farmInfo) {
+    farmInfo.sort((a, b) => a.sailNum - b.sailNum);
+    if (farmInfo.length > 3) {
+      farmInfo.slice(0, 3);
+    }
+  }
+  return farmInfo;
+}
+
+/**
  * 获取单个农场信息
  * @param {int} id
  */
@@ -51,7 +83,7 @@ async function getFarmInfoById(id) {
       id: id
     },
     include: {
-      model: Good_Supplier
+      model: Supplier_Info
     }
   });
   let cropRes = await getFarmCrops(id);
@@ -130,7 +162,7 @@ async function createFarmInfo({
   descript,
   tags,
   totalNum,
-  remainNum,
+  sailNum,
   preArea,
   preMoney,
   imgCover,
@@ -144,7 +176,7 @@ async function createFarmInfo({
     descript,
     tags,
     totalNum,
-    remainNum,
+    sailNum,
     preArea,
     preMoney,
     imgCover,
@@ -207,12 +239,14 @@ async function createFarmOrder({
   userId,
   couponId,
   orderAmount,
+  farmCount,
   payMoney,
   address
 }) {
   const result = await Farm_Order.create({
     userId,
     couponId,
+    farmCount,
     order_amount: orderAmount,
     pay_money: payMoney,
     address
@@ -229,6 +263,26 @@ async function createFarmOrderDetail(valueArr) {
   return result;
 }
 
+/**
+ * 更新农场信息
+ * @param {int} farmId
+ * @param {int} count
+ */
+async function updateFarmInfo(farmId, totalNum, sailNum) {
+  let result = await Farm_Info.update(
+    {
+      totalNum,
+      sailNum
+    },
+    {
+      where: {
+        id: farmId
+      }
+    }
+  );
+  return result;
+}
+
 module.exports = {
   getAllFarmsInfo,
   getFarmInfoById,
@@ -240,5 +294,8 @@ module.exports = {
   createFarmOrderDetail,
   getUserFarmsInfo,
   getSupplierFarms,
-  updateFarmState
+  updateFarmState,
+  updateFarmInfo,
+  getHotFarms,
+  getOnlineFarm
 };

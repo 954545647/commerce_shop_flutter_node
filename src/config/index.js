@@ -5,6 +5,7 @@ const { STRING, DECIMAL, TEXT, INTEGER, BOOLEAN } = require("./types");
 const {
   SECRET_KEY,
   TOKEN_KEY,
+  REDIS_KEY,
   ACCESS_TOKEN_EXPIRE,
   REFRESH_TOKEN_EXPIRE
 } = require("./keys");
@@ -25,5 +26,6 @@ module.exports = {
   TOKEN_KEY,
   ACCESS_TOKEN_EXPIRE,
   REFRESH_TOKEN_EXPIRE,
-  BASEURL
+  BASEURL,
+  REDIS_KEY
 };

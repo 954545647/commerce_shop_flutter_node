@@ -2,7 +2,7 @@
  * @description 购物车 services
  */
 
-const { Order_Cart, Good_Info } = require("@db/model");
+const { Order_Cart, Animal_Info } = require("@db/model");
 
 /**
  * 获取用户的购物车
@@ -21,7 +21,7 @@ async function getUserCarts(userId, goodId) {
       where: whereOpt,
       include: [
         {
-          model: Good_Info
+          model: Animal_Info
         }
       ]
     });
@@ -31,7 +31,7 @@ async function getUserCarts(userId, goodId) {
       where: whereOpt,
       include: [
         {
-          model: Good_Info
+          model: Animal_Info
         }
       ]
     });
@@ -45,15 +45,15 @@ async function getUserCarts(userId, goodId) {
       if (
         data &&
         data.dataValues &&
-        data.dataValues.Good_Info &&
-        data.dataValues.Good_Info.dataValues
+        data.dataValues.Animal_Info &&
+        data.dataValues.Animal_Info.dataValues
       ) {
-        // 对数据进行处理，并且删掉 Good_Info 的id数据
-        let goodInfo = data.dataValues.Good_Info.dataValues;
+        // 对数据进行处理，并且删掉 Animal_Info 的id数据
+        let goodInfo = data.dataValues.Animal_Info.dataValues;
         // 因为购物车数据中已经有goodId了，所以直接删掉即可
         delete goodInfo.id;
         Object.assign(data.dataValues, goodInfo);
-        delete data.dataValues.Good_Info;
+        delete data.dataValues.Animal_Info;
         cartInfo.push(data.dataValues);
       }
     });

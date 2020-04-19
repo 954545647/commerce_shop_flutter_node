@@ -114,8 +114,8 @@ async function updateCover(id, imgCover) {
     // 修改成功
     return new global.succ.SuccessModel({});
   } else {
-    // 修改密码错误
-    return new global.errs.changePassFail();
+    // 修改头像错误
+    return new global.errs.updateInfoFail();
   }
 }
 
@@ -147,7 +147,7 @@ async function getDefaultAddress(id) {
 }
 
 /**
- * 获取用户地址数据
+ * 新增用户地址数据
  * @param {int} 用户id
  * @param {string} 地址参数
  */

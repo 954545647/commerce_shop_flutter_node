@@ -2,25 +2,60 @@
  * @description coupon service
  */
 
-const { Good_Info, Good_Supplier } = require("@db/model");
+const { Animal_Info, Supplier_Info } = require("@db/model");
 const { cutPath } = require("@utils/util");
 
 /**
  * 查找数据库中所有的商品信息(包括商家信息)
  */
-async function getAllGoods(id) {
+async function getAllGoods(id, limit) {
   const whereOpt = {};
   if (id) {
     Object.assign(whereOpt, { supplierId: id });
   }
-  const result = await Good_Info.findAll({
+  if (limit) {
+    Object.assign(whereOpt, { status: limit.status });
+  }
+  const result = await Animal_Info.findAll({
     where: whereOpt,
     include: [
       {
-        model: Good_Supplier
-        // attributes: ["username", "phone"]
+        model: Supplier_Info,
+        attributes: ["id", "username", "phone", "imgCover"]
       }
     ]
+  });
+  return result;
+}
+
+/**
+ * 获取上线动物
+ */
+async function getOnline() {
+  const result = await getAllGoods(null, {
+    status: 1
+  });
+  return result;
+}
+
+/**
+ * 获取热门认养
+ */
+async function getHotGoods(limit) {
+  let whereOpt = {};
+  if (limit) {
+    whereOpt = limit;
+  }
+  const result = await Animal_Info.findAll({
+    where: whereOpt,
+    include: [
+      {
+        model: Supplier_Info,
+        attributes: ["id", "username", "phone", "imgCover"]
+      }
+    ],
+    order: [["sales", "DESC"]],
+    limit: 3
   });
   return result;
 }
@@ -30,10 +65,16 @@ async function getAllGoods(id) {
  * @param {int} goodId
  */
 async function getGoodInfoById(goodId) {
-  const result = await Good_Info.findOne({
+  const result = await Animal_Info.findOne({
     where: {
       id: goodId
-    }
+    },
+    include: [
+      {
+        model: Supplier_Info,
+        attributes: ["id", "username", "phone", "imgCover"]
+      }
+    ]
   });
   return result;
 }
@@ -54,7 +95,7 @@ async function newGoodInfo({
   supplierId
 }) {
   imgCover = cutPath(imgCover);
-  const result = await Good_Info.create({
+  const result = await Animal_Info.create({
     supplierId,
     goodName,
     price,
@@ -74,7 +115,7 @@ async function newGoodInfo({
  * @param {int} count
  */
 async function updateGoodInfo(goodId, stock, sales) {
-  let result = await Good_Info.update(
+  let result = await Animal_Info.update(
     {
       stock,
       sales
@@ -93,7 +134,7 @@ async function updateGoodInfo(goodId, stock, sales) {
  * @param {int} goodId
  */
 async function updateGoodStatus(goodId, status) {
-  const result = await Good_Info.update(
+  const result = await Animal_Info.update(
     {
       status
     },
@@ -111,5 +152,7 @@ module.exports = {
   getAllGoods,
   updateGoodInfo,
   getGoodInfoById,
-  updateGoodStatus
+  updateGoodStatus,
+  getHotGoods,
+  getOnline
 };

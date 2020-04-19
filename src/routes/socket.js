@@ -1,5 +1,5 @@
 /**
- * @description 订单路由
+ * @description 通信路由
  */
 
 const router = require("koa-router")();
@@ -12,6 +12,7 @@ const {
   getClientServiceHistory,
   getClientSupplierHistory
 } = require("@controller/socket");
+
 // 模拟客服
 router.get("/", async ctx => {
   ctx.response.type = "html";
@@ -39,6 +40,7 @@ router.post("/sMessage", async ctx => {
   ctx.body = await getSupplierMessage(id);
 });
 
+// 获取顾客和商家的聊天记录
 router.post("/supplierHistory", new Auth().token, async ctx => {
   const { fromId, toId } = ctx.request.body;
   ctx.body = await getClientSupplierHistory(fromId, toId);

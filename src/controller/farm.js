@@ -10,7 +10,9 @@ const {
   createFarmInfo,
   createCropInfo,
   createFarmCrop,
-  updateFarmState
+  updateFarmState,
+  updateFarmInfo,
+  getHotFarms
 } = require("@services/farm");
 
 /**
@@ -28,7 +30,19 @@ async function getFarmInfo(id) {
 
 // 获取全部农场信息
 async function getAllFarms() {
-  const result = await getAllFarmsInfo();
+  const result = await getAllFarmsInfo({
+    status: 1
+  });
+  if (result) {
+    return new global.succ.SuccessModel({ data: result });
+  } else {
+    return new global.errs.searchInfoFail();
+  }
+}
+
+// 获取热门农场信息
+async function getHotFarm() {
+  const result = await getHotFarms();
   if (result) {
     return new global.succ.SuccessModel({ data: result });
   } else {
@@ -44,6 +58,7 @@ async function newFarmOrder({
   userId,
   couponId,
   farmId,
+  farmCount,
   orderAmount,
   payMoney,
   address,
@@ -58,6 +73,7 @@ async function newFarmOrder({
     couponId,
     orderAmount,
     payMoney,
+    farmCount,
     address
   });
   if (orderInfo && orderInfo.dataValues) {
@@ -90,6 +106,24 @@ async function newFarmOrder({
 }
 
 /**
+ * 更新农场信息
+ * @param {int} goodId
+ * @param {int} count
+ */
+async function updateInfo(farmInfo) {
+  let result = await getFarmInfoById(farmInfo.farmId);
+  if (result && result.farmInfo) {
+    totalNum = result.farmInfo.totalNum - farmInfo.areaNum;
+    sailNum = result.farmInfo.sailNum + farmInfo.areaNum;
+  }
+  let res = await updateFarmInfo(farmInfo.farmId, totalNum, sailNum);
+  if (!res) {
+    return new global.errs.updateInfoFail();
+  }
+  return new global.succ.SuccessModel({ msg: "更新成功" });
+}
+
+/**
  * 新增农场
  * @param {int|string} param0
  */
@@ -99,7 +133,7 @@ async function newFarm({
   descript,
   tags,
   totalNum,
-  remainNum,
+  sailNum,
   preArea,
   preMoney,
   imgCover,
@@ -112,7 +146,7 @@ async function newFarm({
     descript,
     tags,
     totalNum,
-    remainNum,
+    sailNum,
     preArea,
     preMoney,
     imgCover,
@@ -153,5 +187,7 @@ module.exports = {
   getAllFarms,
   newFarmOrder,
   newFarm,
-  newCrop
+  newCrop,
+  getHotFarm,
+  updateInfo
 };

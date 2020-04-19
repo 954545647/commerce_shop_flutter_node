@@ -2,9 +2,6 @@
  * @description 商家接口
  */
 const router = require("koa-router")();
-const path = require("path"); //路径管理
-const fs = require("fs"); //路径管理
-const { BASEURL } = require("@config");
 router.prefix("/supplier"); // 前缀
 const Auth = require("@middlewares/auth");
 const { UserNameValidator } = require("@validators/user");
@@ -13,6 +10,7 @@ const {
   newSupplier,
   registerLogin,
   getSupplierInfoById,
+  getSupplierByGoodId,
   getSupplierFarm,
   getSupplierGood,
   getSupplierOrder,
@@ -55,15 +53,27 @@ router.post("/ifExit", async ctx => {
   ctx.body = await registerExit(username);
 });
 
+// 获取商家数据
+router.post("/getSupplierInfo", new Auth().token, async ctx => {
+  const id = ctx.auth.id;
+  ctx.body = await getSupplierInfoById(id);
+});
+
 // 获取全部商家信息
 router.get("/getAll", new Auth().token, async ctx => {
   ctx.body = await getSuppliersInfo();
 });
 
-// 获取单个商家信息
+// 通过商家id获取单个商家信息
 router.post("/getSupplierById", async ctx => {
-  const { goodId = null, supplierId = null } = ctx.request.body;
-  ctx.body = await getSupplierInfoById(goodId, supplierId);
+  const { id } = ctx.request.body;
+  ctx.body = await getSupplierInfoById(id);
+});
+
+// 通过商品id获取单个商家信息
+router.post("/getSupplierByGoodId", async ctx => {
+  const { goodId } = ctx.request.body;
+  ctx.body = await getSupplierByGoodId(goodId);
 });
 
 // 获取商家的发布的商品

@@ -6,6 +6,7 @@ const requireDirectory = require("require-directory");
 const Router = require("koa-router");
 const koaStatic = require("koa-static");
 const catchError = require("@middlewares/exception.js");
+const redisCache = require("@middlewares/redisCache.js");
 const koaBody = require("koa-body");
 const { startOrderInterval } = require("@utils/queue");
 const { ERROR_OPTIONS } = require("@config");
@@ -69,6 +70,7 @@ class InitApp {
     );
     InitApp.app.use(koaStatic(path.join(__dirname, "../static")));
     InitApp.app.use(catchError);
+    InitApp.app.use(redisCache);
   }
 
   /**
@@ -108,6 +110,7 @@ class InitApp {
    *
    */
   static initMessageQueue() {
+    // orderLoop 用来存储 map
     global.orderLoop = new Array(3000);
     global.orderMap = new Map(); // 记录每个uid的slotIndex
     global.currentSlotIndex = 1; // 当前要检测的slot

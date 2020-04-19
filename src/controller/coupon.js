@@ -8,7 +8,9 @@ const {
   getCoupons,
   newCounponTakeHistory,
   updateCounponUseHistory,
-  checkCouponIfTake
+  checkCouponIfTake,
+  getCouponCount,
+  updateCount
 } = require("@services/coupon");
 
 /**
@@ -55,12 +57,13 @@ async function getUserCoupon(id) {
  * 新增优惠卷
  * @param {string | int} param0 优惠卷信息
  */
-async function newCoupon({ name, with_amount, used_amount, type = 0 }) {
+async function newCoupon({ name, threshold, faceValue, source, count }) {
   const couponInfo = await newCounponInfo({
     name,
-    type,
-    with_amount,
-    used_amount
+    source,
+    threshold,
+    faceValue,
+    count
   });
   if (couponInfo) {
     return new global.succ.SuccessModel({ data: couponInfo });
@@ -70,42 +73,79 @@ async function newCoupon({ name, with_amount, used_amount, type = 0 }) {
 }
 
 /**
- * 操作优惠卷
+ * 更新优惠卷
  * @param {string | int} param0 优惠卷信息
  */
-async function modifyCounpon({ userId, couponId, orderId }) {
+async function updateCounpon({ userId, couponId, orderId }) {
   // 传递了订单Id，则是使用优惠卷，更新信息
-  if (orderId) {
-    const result = await updateCounponUseHistory({ userId, couponId, orderId });
-    if (result) {
-      return new global.succ.SuccessModel({ data: result });
-    } else {
-      // 优惠卷使用数据修改失败
-      return new global.errs.couponUseDataWrong();
-    }
+  const result = await updateCounponUseHistory({ userId, couponId, orderId });
+  if (result) {
+    return new global.succ.SuccessModel({ data: result });
   } else {
-    // 新增优惠卷领取信息
-    // 首先判断优惠卷是否被领取
-    let ifTake = await checkCouponIfTake(userId, couponId);
-    if (ifTake && ifTake.dataValues.use_state === 0) {
-      // 优惠卷已经领取过了
-      return new global.errs.alreadyTake();
-    } else {
-      // 新增优惠卷领取信息
-      let result = await newCounponTakeHistory(userId, couponId);
-      if (result) {
-        return new global.succ.SuccessModel({ data: result });
-      } else {
-        // 优惠卷领取失败
-        return new global.errs.takeCouponFail();
-      }
-    }
+    // 优惠卷使用数据修改失败
+    return new global.errs.couponUseDataWrong();
   }
+}
+
+/**
+ * 领取优惠卷
+ * @param {int} userId
+ */
+async function takeCoupon(userId, couponId) {
+  // 先看是否顾客领取
+  let ifTake = await CouponIfTake(userId, couponId);
+  if (ifTake) {
+    // 优惠卷已经领取过了
+    return new global.errs.alreadyTake();
+  }
+  // 判断优惠劵数量
+  let count = await getCouponNum(couponId);
+  if (count == 0) {
+    // 优惠卷数量不足
+    return new global.errs.takeCouponFail();
+  }
+  // 新增优惠卷领取信息
+  let result = await newCounponTakeHistory(userId, couponId);
+  // 更新优惠卷的剩余数量
+  await updateCount(couponId, count - 1);
+  if (result) {
+    return new global.succ.SuccessModel({ data: result });
+  } else {
+    // 优惠卷领取失败
+    return new global.errs.takeCouponFail();
+  }
+}
+
+/**
+ * 判断优惠卷是否获取
+ * @param {int} userId
+ * @param {int} couponId
+ */
+async function CouponIfTake(userId, couponId) {
+  let ifTake = false;
+  let data = await checkCouponIfTake(userId, couponId);
+  if (data && data.dataValues.use_state === 0) {
+    ifTake = true;
+  }
+  return ifTake;
+}
+
+/**
+ * 获取优惠卷的剩余数量
+ * @param {int} couponId
+ */
+async function getCouponNum(couponId) {
+  let data = await getCouponCount(couponId);
+  if (data && data.dataValues.count) {
+    return data.dataValues.count;
+  }
+  return 0;
 }
 
 module.exports = {
   getUserCoupon,
   newCoupon,
   getAllCoupons,
-  modifyCounpon
+  updateCounpon,
+  takeCoupon
 };

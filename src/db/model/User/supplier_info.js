@@ -6,10 +6,10 @@ const seq = require("@db/seq");
 const { Model } = require("sequelize");
 const { STRING, INTEGER } = require("@config/types");
 
-class Good_Supplier extends Model {}
+class Supplier_Info extends Model {}
 
 // 商品供应商表
-Good_Supplier.init(
+Supplier_Info.init(
   {
     id: {
       type: INTEGER,
@@ -57,4 +57,4 @@ Good_Supplier.init(
   }
 );
 
-module.exports = Good_Supplier;
+module.exports = Supplier_Info;

@@ -7,7 +7,8 @@ const {
   getAllFarms,
   newFarmOrder,
   newFarm,
-  newCrop
+  newCrop,
+  updateInfo
 } = require("@controller/farm");
 const Auth = require("@middlewares/auth");
 router.prefix("/farm");
@@ -20,7 +21,6 @@ router.post("/getInfo", async ctx => {
 
 // 获取土地列表
 router.get("/getAlls", async ctx => {
-  console.log("xxx");
   ctx.body = await getAllFarms();
 });
 
@@ -30,6 +30,7 @@ router.post("/newOrder", new Auth().token, async ctx => {
   const {
     couponId,
     farmId,
+    farmCount,
     orderAmount,
     payMoney,
     address,
@@ -41,6 +42,7 @@ router.post("/newOrder", new Auth().token, async ctx => {
     userId,
     couponId,
     farmId,
+    farmCount,
     orderAmount,
     payMoney,
     address,
@@ -58,7 +60,7 @@ router.post("/newFarm", async ctx => {
     descript,
     tags,
     totalNum,
-    remainNum = totalNum,
+    sailNum = 0,
     preArea,
     preMoney,
     imgCover,
@@ -71,7 +73,7 @@ router.post("/newFarm", async ctx => {
     descript,
     tags,
     totalNum,
-    remainNum,
+    sailNum,
     preArea,
     preMoney,
     imgCover,
@@ -90,5 +92,11 @@ router.post("/newCrop", async ctx => {
     imgCover,
     farmId
   });
+});
+
+// 更新农场
+router.post("/update", async ctx => {
+  const { farmInfo } = ctx.request.body;
+  ctx.body = await updateInfo(farmInfo);
 });
 module.exports = router;

@@ -16,6 +16,7 @@ const { getUserInfoByIds } = require("@services/user");
 const { getSupplierFarms } = require("@services/farm");
 const { getAllGoods } = require("@services/goods");
 const generateToken = require("@utils/token");
+const { REFRESH_TOKEN_EXPIRE } = require("@config/keys");
 
 const {
   getSupplierGoodOrders,
@@ -27,7 +28,7 @@ const {
 const doCrypto = require("@utils/cryp.js");
 
 /**
- * 获取商家信息
+ * 获取全部商家信息
  */
 async function getSuppliersInfo() {
   const result = await getAllSuppliers();
@@ -40,22 +41,32 @@ async function getSuppliersInfo() {
 }
 
 /**
- * 通过商品id或者商家id获取商家信息
+ * 通过商家id获取商家信息
  * @param {int} goodId
  * @param {int} supplierId
  */
-async function getSupplierInfoById(goodId, supplierId) {
-  let result;
-  if (goodId) {
-    result = await getSupplierInfoByGoodId(goodId);
-  } else if (supplierId) {
-    result = await getSupplierInfoBySupplierId(supplierId);
-  }
+async function getSupplierInfoById(supplierId) {
+  let result = await getSupplierInfoBySupplierId(supplierId);
   if (result) {
     // 获取成功
     return new global.succ.SuccessModel({ msg: "获取成功", data: result });
   } else {
-    return new global.errs.updateInfoFail();
+    return new global.errs.searchInfoFail();
+  }
+}
+
+/**
+ * 通过商品id获取商家信息
+ * @param {int} goodId
+ * @param {int} supplierId
+ */
+async function getSupplierByGoodId(goodId) {
+  let result = await getSupplierInfoByGoodId(goodId);
+  if (result) {
+    // 获取成功
+    return new global.succ.SuccessModel({ msg: "获取成功", data: result });
+  } else {
+    return new global.errs.searchInfoFail();
   }
 }
 
@@ -128,7 +139,11 @@ async function registerLogin(username, password) {
 
   // 生成token
   let accessToken = generateToken(supplierInfo.dataValues);
-  Object.assign(supplierInfo.dataValues, { accessToken });
+  let refreshToken = generateToken(
+    supplierInfo.dataValues,
+    REFRESH_TOKEN_EXPIRE
+  );
+  Object.assign(supplierInfo.dataValues, { accessToken, refreshToken });
   return new global.succ.SuccessModel({ data: supplierInfo.dataValues });
 }
 
@@ -243,6 +258,7 @@ async function getSupplierMessage(id) {
 module.exports = {
   getSuppliersInfo,
   newSupplier,
+  getSupplierByGoodId,
   getSupplierInfoById,
   registerLogin,
   getSupplierFarm,

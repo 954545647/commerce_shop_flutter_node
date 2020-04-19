@@ -15,7 +15,7 @@ function doAction(orderId) {
   let currentSlotIndex = global.currentSlotIndex;
   let slotIndex = orderMap.get(orderId);
   slotIndex && orderLoop[slotIndex].delete(orderId);
-  // 将该orderId重现添加到循环队列中
+  // 将该orderId重新添加到循环队列中
   // 周期301，新插入的置入当前的后一个（即，300s后可以扫描到它）
   // 更新map中这个orderId的最新slotIndex
   slotIndex = currentSlotIndex - 1;

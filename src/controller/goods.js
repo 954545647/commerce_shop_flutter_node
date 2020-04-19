@@ -7,6 +7,7 @@ const {
   getAllGoods,
   getGoodInfoById,
   updateGoodInfo,
+  getHotGoods,
   updateGoodStatus
 } = require("@services/goods");
 
@@ -14,32 +15,66 @@ const {
  * 获取所有商品
  */
 async function getAlls(id) {
-  const result = await getAllGoods(id);
+  let result = await getAllGoods(id);
+  result = handleData(result);
   if (result) {
-    let goodInfo = [];
-    result.forEach(data => {
-      if (
-        data &&
-        data.dataValues &&
-        data.dataValues.Good_Supplier &&
-        data.dataValues.Good_Supplier.dataValues
-      ) {
-        // 将合并查找的 Good_Supplier 信息提取出来
-        let supplierInfo = data.dataValues.Good_Supplier.dataValues;
-        // 把商家的id名字更改为 supplierId，这样不会发生重叠
-        supplierInfo = JSON.parse(
-          JSON.stringify(supplierInfo).replace(/id/g, "supplierId")
-        );
-        // 把商家店铺的封面更改为 simgCover，这样不会发生重叠
-        supplierInfo = JSON.parse(
-          JSON.stringify(supplierInfo).replace(/imgCover/g, "simgCover")
-        );
-        Object.assign(data.dataValues, supplierInfo);
-        delete data.dataValues.Good_Supplier;
-        goodInfo.push(data.dataValues);
-      }
-    });
-    return new global.succ.SuccessModel({ data: goodInfo });
+    return new global.succ.SuccessModel({ data: result });
+  } else {
+    return new global.errs.searchInfoFail();
+  }
+}
+
+/**
+ * 获取在线动物
+ * @param {int} id
+ */
+async function getOnlineAnimal(id) {
+  let result = await getAllGoods(id, { status: 1 });
+  result = handleData(result);
+  if (result) {
+    return new global.succ.SuccessModel({ data: result });
+  } else {
+    return new global.errs.searchInfoFail();
+  }
+}
+
+// 处理数据
+function handleData(data) {
+  let goodInfo = [];
+  data.forEach(data => {
+    if (
+      data &&
+      data.dataValues &&
+      data.dataValues.Supplier_Info &&
+      data.dataValues.Supplier_Info.dataValues
+    ) {
+      // 将合并查找的 Supplier_Info 信息提取出来
+      let supplierInfo = data.dataValues.Supplier_Info.dataValues;
+      // 把商家的id名字更改为 supplierId，这样不会发生重叠
+      supplierInfo = JSON.parse(
+        JSON.stringify(supplierInfo).replace(/id/g, "supplierId")
+      );
+      // 把商家店铺的封面更改为 simgCover，这样不会发生重叠
+      supplierInfo = JSON.parse(
+        JSON.stringify(supplierInfo).replace(/imgCover/g, "simgCover")
+      );
+      Object.assign(data.dataValues, supplierInfo);
+      delete data.dataValues.Supplier_Info;
+      goodInfo.push(data.dataValues);
+    }
+  });
+  return goodInfo;
+}
+
+/**
+ * 获取热门商品
+ */
+async function getHotGood() {
+  let result = await getHotGoods({
+    status: 1
+  });
+  if (result) {
+    return new global.succ.SuccessModel({ data: result });
   } else {
     return new global.errs.searchInfoFail();
   }
@@ -87,7 +122,7 @@ async function newGood({
   if (goodInfo) {
     return new global.succ.SuccessModel({ data: goodInfo });
   } else {
-    return new global.errs.newCouponFail();
+    return new global.errs.createInfoFail();
   }
 }
 
@@ -131,5 +166,7 @@ module.exports = {
   newGood,
   updateInfo,
   updateStatus,
-  getGoodDetail
+  getGoodDetail,
+  getHotGood,
+  getOnlineAnimal
 };

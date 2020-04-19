@@ -2,14 +2,25 @@
  * @description coupon service
  */
 
-const { Coupon_Info, Coupon_History } = require("@db/model");
+const { Coupon_Info, Coupon_History, Supplier_Info } = require("@db/model");
+const Op = require("Sequelize").Op;
 
 /**
  * 查找数据库中的所有优惠卷
  */
 async function getCoupons() {
-  // 联合查询
-  const result = await Coupon_Info.findAll();
+  const result = await Coupon_Info.findAll({
+    where: {
+      count: {
+        // 优惠卷数量大于0
+        [Op.gt]: 0
+      }
+    },
+    include: {
+      model: Supplier_Info,
+      attributes: ["id", "username", "phone", "imgCover"]
+    }
+  });
   return result;
 }
 
@@ -27,7 +38,11 @@ async function getUserCounpons(id) {
     include: [
       {
         model: Coupon_Info,
-        attributes: ["name", "type", "with_amount", "used_amount"]
+        include: {
+          model: Supplier_Info,
+          attributes: ["id", "username", "phone", "imgCover"]
+        },
+        attributes: ["name", "source", "threshold", "faceValue", "count"]
       }
     ]
   });
@@ -39,13 +54,14 @@ async function getUserCounpons(id) {
  * 新增优惠卷
  * @param {sting|int} param0 优惠卷信息
  */
-async function newCounponInfo({ name, type, with_amount, used_amount }) {
+async function newCounponInfo({ name, source, threshold, faceValue, count }) {
   // 查询
   const result = await Coupon_Info.create({
     name,
-    type,
-    with_amount,
-    used_amount
+    source,
+    threshold,
+    faceValue,
+    count
   });
   return result;
 }
@@ -76,7 +92,7 @@ async function updateCounponUseHistory({ userId, couponId, orderId }) {
   result = await Coupon_History.update(
     {
       use_state: 1,
-      orderId
+      orderId: orderId
     },
     {
       where: {
@@ -85,6 +101,7 @@ async function updateCounponUseHistory({ userId, couponId, orderId }) {
       }
     }
   );
+  console.log(result);
   return result;
 }
 
@@ -101,11 +118,44 @@ async function newCounponTakeHistory(userId, couponId) {
   return result;
 }
 
+/**
+ * 获取优惠卷的数量
+ * @param {int} couponId
+ */
+async function getCouponCount(couponId) {
+  const result = await Coupon_Info.findOne({
+    where: {
+      id: couponId
+    }
+  });
+  return result;
+}
+
+/**
+ * 更新优惠卷的数量
+ * @param {int} couponId
+ */
+async function updateCount(couponId, count) {
+  const result = await Coupon_Info.update(
+    {
+      count: count
+    },
+    {
+      where: {
+        id: couponId
+      }
+    }
+  );
+  return result;
+}
+
 module.exports = {
   getCoupons,
   getUserCounpons,
   newCounponInfo,
   newCounponTakeHistory,
   updateCounponUseHistory,
-  checkCouponIfTake
+  checkCouponIfTake,
+  getCouponCount,
+  updateCount
 };

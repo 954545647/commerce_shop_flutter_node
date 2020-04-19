@@ -8,7 +8,8 @@ const {
   getUserCoupon,
   newCoupon,
   getAllCoupons,
-  modifyCounpon
+  updateCounpon,
+  takeCoupon
 } = require("@controller/coupon");
 
 // 查找所有优惠卷
@@ -23,27 +24,34 @@ router.post("/myCoupon", new Auth().token, async ctx => {
 });
 
 // 新增优惠卷
-router.post("/new", async ctx => {
-  const { name, type, with_amount, used_amount } = ctx.request.body;
+router.post("/new", new Auth().token, async ctx => {
+  const { name, threshold, faceValue, count } = ctx.request.body;
+  const id = ctx.auth.id;
   ctx.body = await newCoupon({
     name,
-    type,
-    with_amount,
-    used_amount
+    source: id,
+    threshold,
+    faceValue,
+    count
   });
 });
 
-// 处理优惠卷
-// 默认是领取优惠卷，orderId 为空，使用情况为 0
+// 修改优惠卷
 router.post("/handleCoupon", new Auth().token, async ctx => {
-  const { couponId, orderId = null, use_state = 0 } = ctx.request.body;
+  const { couponId, orderId = null } = ctx.request.body;
   const userId = ctx.auth.id;
-  ctx.body = await modifyCounpon({
+  ctx.body = await updateCounpon({
     userId,
     couponId,
-    orderId,
-    use_state
+    orderId
   });
+});
+
+// 领取优惠卷
+router.post("/take", new Auth().token, async ctx => {
+  const userId = ctx.auth.id;
+  const { couponId } = ctx.request.body;
+  ctx.body = await takeCoupon(userId, couponId);
 });
 
 module.exports = router;

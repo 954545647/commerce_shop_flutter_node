@@ -52,6 +52,7 @@
     <ul id="messages"></ul>
     <form action="">
       <input id="m" autocomplete="off" /><button>Send</button>
+      <h1></h1>
     </form>
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -86,7 +87,6 @@
         });
         // 监听服务端将顾客信息转发数据
         socket.on("supplier", function(msg) {
-          console.log(msg);
           $("#messages").append(
             $("<li>").text(
               `${msg.content},${msg.toName},${msg.fromName},${msg.fromId}`

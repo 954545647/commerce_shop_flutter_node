@@ -36,10 +36,10 @@ Farm_Info.init(
       allowNull: false,
       comment: "农场总租地数量（块）"
     },
-    remainNum: {
+    sailNum: {
       type: INTEGER,
       allowNull: false,
-      comment: "剩余可出租的土地数量（块）"
+      comment: "农场租地销量（块）"
     },
     preArea: {
       type: INTEGER,

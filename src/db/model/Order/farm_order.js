@@ -26,6 +26,11 @@ Farm_Order.init(
       allowNull: false,
       comment: "订单金额"
     },
+    farmCount: {
+      type: INTEGER,
+      allowNull: false,
+      comment: "租地数量（块）"
+    },
     pay_money: {
       type: INTEGER,
       allowNull: false,

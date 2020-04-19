@@ -2,18 +2,20 @@
  * @description 初始化socket
  */
 const socketIo = require("socket.io");
-const { saveInfo, getSerivceHistory } = require("@services/socket");
+const { saveInfo } = require("@services/socket");
 const { MessageInfo } = require("@model/socket");
 
 module.exports = appSocket = server => {
   const io = socketIo(server);
-  let servicerId; // 客服人员
+  let servicerId = null; // 客服人员
   let clientsForService = {}; // 当前咨询客服的顾客数据
   let suppliers = {}; // 当前在线的商家数据
   let clientsForSupplier = {}; // 当前咨询商家的顾客数据
 
   // 监听与客户端的连接事件
   io.on("connection", socket => {
+    console.log(`connection接通连接${socket.id}`);
+
     // 客服上线
     socket.on("serviceLogin", () => {
       servicerId = socket.id;
@@ -52,6 +54,7 @@ module.exports = appSocket = server => {
 
     // 监听客户咨询客服服务
     socket.on("startForService", async msg => {
+      console.log(msg);
       // 记录当前咨询聊天用户
       clientsForService[msg.fromId] = socket.id;
       printDetail(servicerId, clientsForService, suppliers, clientsForSupplier);
@@ -169,6 +172,7 @@ module.exports = appSocket = server => {
 
     // 登出
     socket.on("disconnect", () => {
+      console.log(`disconnect断开连接------${socket.id}`);
       // 判断是否是客服下线
       if (socket.id == servicerId) {
         console.log(`客服${socket.id}下线了`);

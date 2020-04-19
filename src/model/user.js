@@ -15,7 +15,7 @@ class registerUserExist extends HttpException {
 }
 
 // 注册失败请重试
-class registerFailInfo extends HttpException {
+class registerFail extends HttpException {
   constructor(msg, errorCode) {
     super();
     this.code = 400;
@@ -96,7 +96,7 @@ class userPassError extends HttpException {
 
 module.exports = {
   registerUserExist,
-  registerFailInfo,
+  registerFail,
   userNotExit,
   userPassError,
   changePassFail,

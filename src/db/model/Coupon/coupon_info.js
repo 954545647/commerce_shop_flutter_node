@@ -15,38 +15,27 @@ Coupon_Info.init(
       allowNull: false,
       comment: "优惠卷名"
     },
-    type: {
+    source: {
       type: INTEGER,
       allowNull: true,
       defaultValue: 0,
-      comment: "使用类型：0(全场通用),1(促销商品)"
+      comment: "优惠卷来源，值为商家id"
     },
-    with_amount: {
+    threshold: {
       type: INTEGER,
       allowNull: false,
-      comment: "满多少金额"
+      comment: "阙值"
     },
-    used_amount: {
+    faceValue: {
       type: INTEGER,
       allowNull: false,
-      comment: "用卷金额"
+      comment: "面值"
+    },
+    count: {
+      type: INTEGER,
+      allowNull: false,
+      comment: "优惠卷数量"
     }
-    // indate: {
-    //   type: INTEGER,
-    //   allowNull: true,
-    //   defaultValue: 30,
-    //   comment: "有效期(按天计算)"
-    // }
-    // quota: {
-    //   type: INTEGER,
-    //   allowNull: false,
-    //   comment: "优惠卷发放数量"
-    // },
-    // take_count: {
-    //   type: INTEGER,
-    //   allowNull: false,
-    //   comment: "优惠卷领取数量"
-    // },
   },
   {
     sequelize: seq

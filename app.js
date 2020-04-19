@@ -8,7 +8,8 @@ const appSocket = require("@core/socket");
 const { PORT } = require("@config/env");
 const app = new Koa();
 const server = require("http").createServer(app.callback());
-InitApp.initCore(app);
+// 这里修改了顺序
 appSocket(server);
+InitApp.initCore(app);
 
 server.listen(PORT);

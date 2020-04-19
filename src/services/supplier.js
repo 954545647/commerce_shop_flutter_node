@@ -2,14 +2,14 @@
  * @description 订单 services
  */
 
-const { Good_Supplier, Good_Info } = require("@db/model");
+const { Supplier_Info, Animal_Info } = require("@db/model");
 const { cutPath } = require("@utils/util");
 
 /**
  * 获取所有商家信息
  */
 async function getAllSuppliers() {
-  const result = await Good_Supplier.findAll({});
+  const result = await Supplier_Info.findAll({});
   return result;
 }
 
@@ -18,7 +18,7 @@ async function getAllSuppliers() {
  * @param {string} username
  */
 async function getSupplierInfo(username) {
-  const result = await Good_Supplier.findOne({
+  const result = await Supplier_Info.findOne({
     attributes: ["id", "username", "phone", "imgCover"],
     where: {
       username
@@ -34,7 +34,7 @@ async function getSupplierInfo(username) {
 async function getSupplierInfoByGoodId(id) {
   let result;
   // 根据商品id查询
-  result = await Good_Info.findOne({
+  result = await Animal_Info.findOne({
     where: {
       id
     }
@@ -56,7 +56,7 @@ async function getSupplierInfoByGoodId(id) {
 async function getSupplierInfoBySupplierId(id) {
   let result;
   // 根据商家id查询
-  result = await Good_Supplier.findOne({
+  result = await Supplier_Info.findOne({
     where: {
       id: id
     }
@@ -80,7 +80,7 @@ async function newSupplierInfo({
   frontImg = cutPath(frontImg);
   backImg = cutPath(backImg);
   imgCover = cutPath(imgCover);
-  const result = await Good_Supplier.create({
+  const result = await Supplier_Info.create({
     username,
     password,
     phone,

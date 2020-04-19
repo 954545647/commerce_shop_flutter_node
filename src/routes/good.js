@@ -8,15 +8,22 @@ const {
   getAlls,
   updateInfo,
   getGoodDetail,
-  updateStatus
+  updateStatus,
+  getOnlineAnimal
 } = require("@controller/goods");
 // const { NewGoodValidator } = require("@validators/good");
 router.prefix("/goods"); // 前缀
 
-// 获取所有商品(可兼容传递id，获取该供应商id下的所有商品)
+// 获取所有商品(可兼容传递商家id，获取该供应商id下的所有商品)
 router.post("/getAlls", async ctx => {
   const { id = null } = ctx.request.body;
   ctx.body = await getAlls(id);
+});
+
+// 获取在线动物
+router.get("/online", async ctx => {
+  const { id = null } = ctx.request.body;
+  ctx.body = await getOnlineAnimal(id);
 });
 
 // 新增商品
@@ -55,14 +62,13 @@ router.post("/update", new Auth().token, async ctx => {
 // 更新状态
 router.post("/updateStatus", new Auth().token, async ctx => {
   const { goodId, status } = ctx.request.body;
-  console.log(goodId, status);
   ctx.body = await updateStatus(goodId, status);
 });
 
 // 获取商品详细信息
 router.post("/getInfo", async ctx => {
-  const { goodId } = ctx.request.body;
-  ctx.body = await getGoodDetail(goodId);
+  const { id } = ctx.request.body;
+  ctx.body = await getGoodDetail(id);
 });
 
 module.exports = router;
