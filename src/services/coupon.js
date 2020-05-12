@@ -101,7 +101,6 @@ async function updateCounponUseHistory({ userId, couponId, orderId }) {
       }
     }
   );
-  console.log(result);
   return result;
 }
 

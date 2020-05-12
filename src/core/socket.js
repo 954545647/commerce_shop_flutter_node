@@ -77,7 +77,7 @@ module.exports = appSocket = server => {
         sendSupplierLogin(socket, suppliers[msg.toId].username);
       } else {
         // 商家未在线
-        sendSupplierNotExit(socket);
+        // sendSupplierNotExit(socket);
       }
     });
 
@@ -117,7 +117,7 @@ module.exports = appSocket = server => {
       };
       // 商家未在线
       if (!supplier) {
-        sendSupplierNotExit(socket);
+        // sendSupplierNotExit(socket);
       } else {
         // 将消息转发给商家
         socket.to(supplier.socketId).emit("supplier", message);

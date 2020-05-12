@@ -179,7 +179,11 @@ async function getFarmOrderDetail(orderId) {
     where: {
       id: orderId
     },
-    include: [{ model: Farm_Order_Detail }]
+    include: [
+      {
+        model: Farm_Order_Detail
+      }
+    ]
   });
   return result;
 }

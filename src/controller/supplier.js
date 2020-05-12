@@ -210,6 +210,18 @@ async function getSupplierOrder(id) {
       }
       // 根据租地订单详情表（副表）中的id去获取租地主表的信息
       let farmOrderDetails = await getFarmOrderDetail(cur.orderId);
+      let farmOrderDetailsTemp = [];
+      if (
+        farmOrderDetails &&
+        farmOrderDetails[0] &&
+        farmOrderDetails[0].dataValues
+      ) {
+        farmOrderDetailsTemp =
+          farmOrderDetails[0].dataValues["Farm_Order_Details"];
+        farmOrderDetails[0].dataValues[
+          "Farm_Order_Details"
+        ] = farmOrderDetailsTemp.filter(item => item["crop_count"] > 0);
+      }
       supplierOrders.farmOrderList.push(...farmOrderDetails);
       farmOrderIds.push(cur.orderId);
     }

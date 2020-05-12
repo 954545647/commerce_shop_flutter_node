@@ -55,7 +55,12 @@ router.post("/ifExit", async ctx => {
 
 // 获取商家数据
 router.post("/getSupplierInfo", new Auth().token, async ctx => {
-  const id = ctx.auth.id;
+  let id;
+  if (ctx.request.body && ctx.request.body.id) {
+    id = ctx.request.body.id;
+  } else {
+    id = ctx.auth.id;
+  }
   ctx.body = await getSupplierInfoById(id);
 });
 

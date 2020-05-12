@@ -80,7 +80,12 @@ router.post("/updateCover", new Auth().token, async ctx => {
 // 获取用户数据
 router.post("/getUserInfo", new Auth().token, async ctx => {
   const { type = 1 } = ctx.request.body;
-  const id = ctx.auth.id;
+  let id;
+  if (ctx.request.body && ctx.request.body.id) {
+    id = ctx.request.body.id;
+  } else {
+    id = ctx.auth.id;
+  }
   ctx.body = await getUserTypeInfo(id, type);
 });
 

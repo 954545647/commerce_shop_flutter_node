@@ -242,6 +242,16 @@ async function getUserTypeInfo(id, type) {
  */
 async function getMyFarm(userId) {
   const result = await getUserFarmsInfo(userId);
+  if (result && result.length) {
+    for (let i = 0; i < result.length; i++) {
+      let cur = result[i].dataValues;
+      let curFarmDetail = cur["Farm_Order_Details"];
+      cur["Farm_Order_Details"] = curFarmDetail.filter(
+        item => item["crop_count"] > 0
+      );
+    }
+  }
+
   if (result) {
     return new global.succ.SuccessModel({ data: result });
   } else {
@@ -256,11 +266,12 @@ async function getMyFarm(userId) {
 async function refreshToken(id) {
   // 获取用户信息
   const userInfo = await getUserInfoById(id);
-  // 生成token
-  let accessToken = generateToken(userInfo.dataValues);
-  let refreshToken = generateToken(userInfo.dataValues, REFRESH_TOKEN_EXPIRE);
-
-  Object.assign(userInfo.dataValues, { accessToken, refreshToken });
+  if (userInfo && userInfo.dataValues) {
+    // 生成token
+    let accessToken = generateToken(userInfo.dataValues);
+    let refreshToken = generateToken(userInfo.dataValues, REFRESH_TOKEN_EXPIRE);
+    Object.assign(userInfo.dataValues, { accessToken, refreshToken });
+  }
   return new global.succ.SuccessModel({ data: userInfo.dataValues });
 }
 
